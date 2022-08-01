@@ -1,0 +1,2999 @@
+openapi: 3.0.3
+
+info:
+  title: Claustrophobia.com private APIs specifications
+  description: Claustrophobia.com private APIs specifications
+  version: 2.0.0
+
+servers:
+  - url: 'https://claustrophobia.com/'
+  - url: 'https://sandbox.claustrophobia.com/'
+
+paths:
+  /api/v2/contacts/:
+    post:
+      summary: Обратная связь
+      description: Принимает данные из формы обратной связи
+      operationId: ContactsFeedback
+      tags:
+        - Контакты
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Иван
+                email:
+                  type: string
+                  example: ivan@mail.ru
+                phone:
+                  type: string
+                  example: +7 900 000-00-00
+                comment:
+                  type: string
+                  example: Описание проблемы
+      
+      responses:
+        '200':
+          description: Сообщение отправлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Сообщение отправлено.
+        
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Обязательное поле.
+                  email:
+                    type: string
+                    example: Обязательное поле.
+                  phone:
+                    type: string
+                    example: Обязательное поле.
+                  comment:
+                    type: string
+                    example: Обязательное поле.
+
+  /api/v2/registration/:
+    post:
+      summary: Регистрация
+      description: User registration
+      operationId: Registration
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: Registration data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationData'
+      
+      responses:
+        '200':
+          description: Registration sucessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationSucessful'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationError'
+
+  /api/login:
+    post:
+      summary: Авторизация
+      description: User login
+      operationId: Login
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginData'
+      
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulLogin'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginError'
+  
+  /api/recover:
+    post:
+      summary: Восстановление пароля
+      description: Recovery password
+      operationId: RecoveryPassword
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: Recovery data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryData'
+      
+      responses:
+        '200':
+          description: Recovery sucessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoverySucessful'
+        '400':
+          description: Recovery error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryError'
+  
+  /api/v2/send-sms-code/:
+    post:
+      summary: Запросить код подтверждения телефона
+      description: Get SMS Code
+      operationId: GetSMSCode
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: Recovery data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                phone:
+                  type: string
+                  example: "+79689588604"
+      
+      responses:
+        '200':
+          description: Recovery sucessful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: Вам отправлено новое сообщение
+        
+        '400':
+          description: Bad Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Некорректный номер телефона
+        
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Слишком много попыток отправки sms
+        
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Пользователя не существует
+  
+  /api/v2/phone_confirmation/:
+    post:
+      summary: Подтверждение номера телефона
+      description: Phone confirmation
+      operationId: PhoneConfirmation
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: Recovery data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                  example: 1
+                sms_code:
+                  type: string
+                  example: "123456"
+      
+      responses:
+        '200':
+          description: Recovery sucessful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+        
+        '400':
+          description: Bad Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Неправильный код
+                  status:
+                    type: string
+                    example: wrong_code
+  
+  /api/v1/timetable:
+    get:
+      summary: Расписание с таймслотами
+      description: Returns list of Timeslot objects and Quest info
+      operationId: getTimeslotsList
+      tags:
+        - Расписание и бронирование
+      parameters:
+        - name: quests
+          in: query
+          description: Quest type or quest id or list of quest ids
+          required: true
+          schema:
+            enum:
+              - 100
+              - 100,777
+              - 'all'
+              - 'available'
+              - 'vr'
+              - 'polygon_pvp'
+              - 'polygon_pve'
+            example: 100
+
+        - name: start_date
+          in: query
+          description: First day of the schedule in DD.MM.YYYY format
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '22.12.2021'
+
+        - name: end_date
+          in: query
+          description: Last day of the schedule in DD.MM.YYYY format (or offset required)
+          schema:
+            type: string
+            format: date
+            example: '31.12.2021'
+
+        - name: offset
+          in: query
+          description: Number of days in the schedule. Minimum — 1, maximum — 90 (or end_date required)
+          schema:
+            type: integer
+            example: null
+
+        - name: city
+          in: query
+          description: City id (default 1 — Moscow)
+          schema:
+            type: integer
+            example: 1
+
+        - name: location
+          in: query
+          description: Location id (default — None)
+          schema:
+            type: integer
+            example: null
+
+        - name: mode
+          in: query
+          description: nested in order to sort timeslots by day and quest (default — flat)
+          schema:
+            type: string
+            enum:
+              - 'flat'
+              - 'nested'
+            example: 'flat'
+      
+      responses:
+        '200':
+          description: A JSON objects with Timeslot representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeslotResponse'
+        '401':
+          description: Unauthorized request
+  
+  /api/v2/timeslots/:
+    get:
+      summary: Таймслоты без квестов
+      description: Returns list of Timeslot objects
+      operationId: getTimeslots
+      tags:
+        - Расписание и бронирование
+      parameters:
+        - name: quests
+          in: query
+          description: Quest type or quest id or list of quest ids
+          required: true
+          schema:
+            enum:
+              - 100
+              - 100,777
+              - 'all'
+              - 'available'
+              - 'vr'
+              - 'polygon_pvp'
+              - 'polygon_pve'
+            example: 100
+
+        - name: start_date
+          in: query
+          description: First day of the schedule in DD.MM.YYYY format
+          required: true
+          schema:
+            type: string
+            format: date
+            example: '22.12.2021'
+
+        - name: end_date
+          in: query
+          description: Last day of the schedule in DD.MM.YYYY format (or offset required)
+          schema:
+            type: string
+            format: date
+            example: '31.12.2021'
+
+        - name: offset
+          in: query
+          description: Number of days in the schedule. Minimum — 1, maximum — 90 (or end_date required)
+          schema:
+            type: integer
+            example: null
+
+        - name: city
+          in: query
+          description: City id (default 1 — Moscow)
+          schema:
+            type: integer
+            example: 1
+
+        - name: location
+          in: query
+          description: Location id (default — None)
+          schema:
+            type: integer
+            example: null
+
+        - name: mode
+          in: query
+          description: nested in order to sort timeslots by day and quest (default — flat)
+          schema:
+            type: string
+            enum:
+              - 'flat'
+              - 'nested'
+            example: 'flat'
+      
+      responses:
+        '200':
+          description: A JSON objects with Timeslot representation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Timeslot'
+        '401':
+          description: Unauthorized request
+  
+  /api/timeslot_booking/:
+    get:
+      summary: Информация о забронированном таймслоте
+      description: Returns booked Timeslot with additional information
+      operationId: getBookedTimeslot
+      tags:
+        - Расписание и бронирование
+      parameters:
+        - name: timeslot_id
+          in: query
+          description: Timeslot id
+          required: true
+          schema:
+            type: integer
+            example: 4115304
+        - name: lang
+          in: query
+          description: Display language
+          schema:
+            type: string
+            example: 'ru'
+      
+      responses:
+        '200':
+          description: Returns Timeslot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookedTimeslotResponse'
+        '404':
+          description: Timeslot not found
+    
+    post:
+      summary: "Шаг 1: Предварительное бронирование"
+      description: Book Timeslot
+      operationId: BookTimeslot
+      tags:
+        - Расписание и бронирование
+      
+      requestBody:
+        description: Order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                timeslot:
+                  type: integer
+                  description: Timeslot id
+                  example: 3004725
+                
+                tickets_count:
+                  type: integer
+                  description: Number of tickets
+                  example: 0
+                
+                language_code:
+                  type: string
+                  description: Language code
+                  example: 'ru'
+                
+                partial_prepay:
+                  type: boolean
+                  description: Partial prepay
+                  example: false
+                
+                additional_services:
+                  type: array
+                  items:
+                    type: object
+                    description: Дополнительные услуги
+                    properties:
+                      id:
+                        type: integer
+                        example: 24
+                      count:
+                        type: integer
+                        example: 1
+              
+              required:
+                - timeslot
+      
+      responses:
+        '200':
+          description: Successful booking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  game:
+                    $ref: '#/components/schemas/ExistingGame'
+                  msg:
+                    type: string
+                    example: Игра забронирована
+                  user_msg_display:
+                    type: string
+                    example: Игра забронирована
+        '403':
+          description: Forbidden
+  
+  /api/applypromocode/:
+    post:
+      summary: "Шаг 2: Применение промокода"
+      description: Apply Promocode
+      operationId: ApplyPromocode
+      tags:
+        - Расписание и бронирование
+      
+      requestBody:
+        description: Order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                game_id:
+                  type: integer
+                  example: 3004725
+                
+                promocode:
+                  type: string
+                  example: HALLO
+              
+              
+              required:
+                - timeslot
+      
+      responses:
+        '200':
+          description: Successful booking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  prepay_price:
+                    type: integer
+                    example: 900
+                  resulting_price:
+                    type: integer
+                    example: 3555
+                  free_game:
+                    type: boolean
+                    example: false
+                  result:
+                    type: string
+                    example: success
+                  msg:
+                    type: string
+                    example: Промокод применен
+                  discount_amount:
+                    type: integer
+                    example: 395
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Промокод недействителен
+                  user_msg_display:
+                    type: string
+                    example: Промокод недействителен
+                  error:
+                    type: boolean
+                    example: true
+        
+        '403':
+          description: Forbidden
+  
+  /api/usecertificate/:
+    post:
+      summary: "Шаг 3: Оплата сертификатом"
+      description: Use Certificate
+      operationId: UseCertificate
+      tags:
+        - Расписание и бронирование
+      
+      requestBody:
+        description: Order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                game_id:
+                  type: integer
+                  example: 4
+                certificate_serial:
+                  type: integer
+                  example: 123
+                certificate_code:
+                  type: string
+                  example: "1111 1111 1111 1111"
+      
+      responses:
+        '200':
+          description: Successful booking
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: False
+                  msg:
+                    type: string
+                    example: Сертификат успешно использован для оплаты игры
+                  redirect_to:
+                    type: string
+                    example: "/pay/success/3/"
+        
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  form_errors:
+                    type: object
+                    properties:
+                      certificate_serial:
+                        type: array
+                        items:
+                          type: string
+                          example: Сертификат с указанным номером отмечен как не проданный. Свяжитесь с нами по адресу helpme@claustrophobia.com
+                  error:
+                    type: boolean
+                    example: true
+        
+        
+        '403':
+          description: Forbidden
+          
+                    
+  /pay/api/:
+    post:
+      summary: "Шаг 4: Оплата"
+      description: Pay
+      operationId: Pay
+      tags:
+        - Расписание и бронирование
+      
+      requestBody:
+        description: Order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                game_id:
+                  type: integer
+                  example: 4
+                payment_method:
+                  type: string
+                  example: kassa
+                partial_prepay:
+                  type: boolean
+                  example: false
+                mode:
+                  type: string
+                  enum: [full, partial, extra]
+                  
+      responses:
+        '200':
+          description: Successful payment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  confirmation:
+                    type: string
+                    example: redirect
+                  msg:
+                    type: string
+                    example: Redirect required
+                  redirect_url:
+                    type: string
+                    example: "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2a5f353c-000f-5000-8000-13b63eff75f5"
+                  result:
+                    type: string
+                    example: success
+        
+        '403':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Оплата заказа недоступна! Игра отменена.
+                  
+                  result:
+                    type: string
+                    example: error
+                  
+                  show_error:
+                    type: boolean
+                    example: True
+
+  /api/v2/whoami:
+    get:
+      summary: Информация о пользователе
+      description: Returns User object
+      operationId: getUserInfo
+      tags:
+        - Действия с пользователем
+      responses:
+        '200':
+          description: A JSON objects with User representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Authentication credentials were not provided.
+        
+        '404':
+          description: Пользователь не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Not found
+  
+  /api/v2/cities/:
+    get:
+      summary: Список городов
+      description: Returns list of City objects
+      operationId: getCitiesList
+      tags:
+        - География
+      responses:
+        '200':
+          description: A JSON array of City objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/City'
+  
+  /api/v2/cities/{cityId}/locations/:
+    get:
+      summary: Список локаций
+      description: Returns list of available locations
+      operationId: getCityLocationsList
+      tags:
+        - География
+      parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+      responses:
+        '200':
+          description: A JSON array of Location objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+  
+  /api/v2/cities/{cityId}/locations/{locationId}/:
+    get:
+      summary: Локация
+      description: Returns location
+      operationId: getLocation
+      tags:
+        - География
+      parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The Location ID
+      responses:
+        '200':
+          description: A JSON array of Location objects
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+  
+  /api/v2/cities/{cityId}/showcases/:
+    get:
+      summary: Витрина квестов
+      description: Returns list of city available showcase
+      operationId: getCityShowcaseList
+      tags:
+        - Главная
+      parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+      responses:
+        '200':
+          description: A JSON array of Showcase objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Showcase'
+  
+  /api/v2/cities/{cityId}/quests/:
+    get:
+      summary: Квесты города
+      description: Returns list of city quests
+      operationId: getCityQuestList
+      tags:
+        - География
+      parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+      responses:
+        '200':
+          description: A JSON array of Quest objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Quest'
+  
+  /api/v2/cities/{cityId}/tags/{questTagType}/:
+    get:
+      summary: Блок "Жанры" / "Я хочу"
+      operationId: getGenericCityTagsList
+      tags:
+        - Главная
+      parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+        - in: path
+          name: questTagType
+          required: True
+          schema:
+            type: string
+            enum: [ generic, genre, iwant ]
+      
+      responses:
+        '200':
+          description: A JSON array of Tag objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+  
+  /api/v2/blog/short-posts/:
+    get:
+      summary: Закулисье Клаустрофобии
+      operationId: getShortBlogPosts
+      tags:
+        - Главная
+      responses:
+        '200':
+          description: A JSON array of Post objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogShortPost'
+  
+  /api/v2/blog/promo-posts/:
+    get:
+      summary: Карточки с кнопками и ссылками
+      operationId: getPromoBlogPosts
+      tags:
+        - Главная
+      responses:
+        '200':
+          description: A JSON array of Post objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogPromoPost'
+  
+  /api/v2/countries/:
+    get:
+      summary: Список стран и валют
+      description: Returns list of countries
+      operationId: getCountries
+      tags:
+        - География
+      responses:
+        '200':
+          description: A JSON array of Country objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+  
+  /api/v2/cities/{cityId}/stations:
+    get:
+      summary: Список станций метро
+      description: Returns list of city stations
+      operationId: getCityStationsList
+      tags:
+        - География
+      parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+      responses:
+        '200':
+          description: A JSON array of Station objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Station'
+  
+  /api/v2/quests/{questId}/feedbacks/:
+    get:
+      summary: Список отзывов на квест
+      tags:
+        - Квест
+      parameters:
+        - in: path
+          name: questId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Список отзывов на квест
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestFeedback'
+  
+  /api/v2/wizard-steps/:
+    get:
+      summary: Шаги для Визарда
+      description: Returns Steps Data
+      operationId: getStepsData
+      tags:
+        - Главная
+
+      responses:
+        '200':
+          description: Filtered Quests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  1:
+                    type: array
+                    items:
+                      type: object
+                    example: [
+                      {
+                        'query': 'who-plays',
+                        'title': 'С кем планируете играть?',
+                        'form': 'radio',
+                        'background': 'img/001.jpg',
+                        'items': {
+                          'friends': {
+                            'display': 'с друзьями',
+                          },
+                          'family': {
+                            'display': 'с семьей',
+                          },
+                          'oneself': {
+                            'display': 'в одиночку',
+                          },
+                          'colleagues': {
+                            'display': 'с коллегами',
+                          },
+                          'children': {
+                            'display': 'только дети',
+                          }
+                        },
+                      }
+                    ]
+                  2:
+                    type: array
+                    items:
+                      type: object
+                    example: [
+                      {
+                        'query': 'is_performance',
+                        'title': 'Добавим актёров в квест?',
+                        'form': 'switcher',
+                        'items': {
+                          'yes': {
+                            'display': 'да',
+                            'image': '/img/yes.jpg'
+                          },
+                          'no': {
+                            'display': 'нет',
+                            'image': '/img/no.jpg'
+                          }
+                        },
+                        'default': 'yes'
+                      }
+                    ]
+                  3:
+                    type: array
+                    items:
+                      type: object
+                    example: [
+                      {
+                        'query': 'complexity',
+                        'title': 'Насколько должно быть сложно?',
+                        'form': 'range',
+                        'depends_on': {
+                          'is_performance': [ 'no' ],
+                        },
+                        'items': {
+                          'simple': {
+                            'display': 'просто',
+                            'image': '/img/simple.jpg'
+                          },
+                          'medium': {
+                            'display': 'средне',
+                            'image': '/img/medium.jpg'
+                          },
+                          'difficult': {
+                            'display': 'сложно',
+                            'image': '/img/difficult.jpg'
+                          },
+                          'very': {
+                            'display': 'очень сложно',
+                            'image': '/img/very.jpg'
+                          },
+                        },
+                        'default': 'simple'
+                      },
+                      {
+                        'query': 'fear_level',
+                        'title': 'Насколько должно быть страшно?',
+                        'form': 'range',
+                        'depends_on': {
+                          'is_performance': [ 'yes' ],
+                        },
+                        'items': {
+                          'not': {
+                            'display': 'нестрашно',
+                            'image': '/img/not.jpg'
+                          },
+                          'bit': {
+                            'display': 'немного страшно',
+                            'image': '/img/bit.jpg'
+                          },
+                          'medium': {
+                            'display': 'средне',
+                            'image': '/img/medium.jpg'
+                          },
+                          'scary': {
+                            'display': 'страшно',
+                            'image': '/img/scary.jpg'
+                          },
+                          'very': {
+                            'display': 'очень страшно',
+                            'image': '/img/very.jpg'
+                          },
+                        },
+                        'default': 'not'
+                      },
+                      {
+                        'query': 'has_cowardly',
+                        'title': 'В нашей команде есть участники, которые не хотят бояться',
+                        'form': 'switcher',
+                        'depends_on': {
+                          'is_performance': [ 'yes' ],
+                        },
+                        'items': {
+                          'yes': {
+                            'display': 'да',
+                          },
+                          'no': {
+                            'display': 'нет',
+                          }
+                        },
+                        'default': 'yes'
+                      }
+                    ]
+                  4:
+                    type: array
+                    items:
+                      type: object
+                    example: [
+                      {
+                        'query': 'gamers_count',
+                        'title': 'Сколько человек будет играть?',
+                        'form': 'range',
+                        'items': {
+                          1: {
+                            'display': '1',
+                            'image': '/img/1.jpg'
+                          },
+                          2: {
+                            'display': '2',
+                            'image': '/img/2.jpg'
+                          },
+                          3: {
+                            'display': '3',
+                            'image': '/img/3.jpg'
+                          },
+                          4: {
+                            'display': '4',
+                            'image': '/img/4.jpg'
+                          },
+                          5: {
+                            'display': '5',
+                            'image': '/img/5.jpg'
+                          },
+                          6: {
+                            'display': '6',
+                            'image': '/img/6.jpg'
+                          },
+                          7: {
+                            'display': '7',
+                            'image': '/img/7.jpg'
+                          },
+                          8: {
+                            'display': '>8',
+                            'image': '/img/8.jpg'
+                          },
+                        },
+                        'default': 1
+                      },
+                      {
+                        'query': 'has_child',
+                        'title': 'В нашей команде есть игроки младше 18',
+                        'form': 'switcher',
+                        'items': {
+                          'yes': {
+                            'display': 'да',
+                          },
+                          'no': {
+                            'display': 'нет',
+                          }
+                        },
+                        'default': 'no'
+                      }
+                    ]
+                  5:
+                    type: array
+                    items:
+                      type: object
+                    example: [
+                      {
+                        'query': 'tags',
+                        'title': 'А что нравится особенно?',
+                        'form': 'checkbox',
+                        'background': 'img/1.jpg',
+                        'depends_on': {
+                          'who-plays': [ 'children', 'family' ],
+                          'has_child': [ 'yes' ],
+                        },
+                        'items': {
+                          'unusual': {
+                            'display': 'необычные',
+                            'image': '/img/1.jpg'
+                          },
+                          'outdoor': {
+                            'display': 'подвижные',
+                            'image': '/img/2.jpg'
+                          },
+                          'adventure': {
+                            'display': 'приключения',
+                            'image': '/img/3.jpg'
+                          },
+                        },
+                      },
+                      {
+                        'query': 'tags',
+                        'title': 'А что нравится особенно?',
+                        'form': 'checkbox',
+                        'background': 'img/1.jpg',
+                        'depends_on': {
+                          'who-plays': [ 'friends', 'oneself', 'colleagues' ],
+                          'has_child': [ 'no' ],
+                        },
+                        'items': {
+                          'unusual': {
+                            'display': 'необычные',
+                            'image': '/img/1.jpg'
+                          },
+                          'outdoor': {
+                            'display': 'подвижные',
+                            'image': '/img/2.jpg'
+                          },
+                          'adventure': {
+                            'display': 'приключения',
+                            'image': '/img/3.jpg'
+                          },
+                          '18+': {
+                            'display': '18+',
+                            'image': '/img/1.jpg'
+                          },
+                          'ero': {
+                            'display': 'эротические',
+                            'image': '/img/2.jpg'
+                          },
+                          'zombie': {
+                            'display': 'зомби',
+                            'image': '/img/3.jpg'
+                          },
+                        },
+                      }
+                    ]
+                  6:
+                    type: array
+                    items:
+                      type: object
+                    example: [
+                      {
+                        'query': 'quests',
+                        'title': 'А где удобнее?',
+                        'form': 'map',
+                        'background': 'img/1.jpg',
+                        'quests': [
+                          {
+                            'id': 123,
+                            'latitude': '42.875549346119016',
+                            'longitude': '74.61982191733546'
+                          },
+                          {
+                            'id': 124,
+                            'latitude': '42.875549346119016',
+                            'longitude': '74.61982191733546'
+                          }
+                        ]
+                      }
+                    ]
+  
+  /api/v2/quests/search/:
+    get:
+      summary: Список наиболее подходящих квестов для Визарда
+      description: Returns Filtered Quests
+      operationId: getFilteredQuests
+      tags:
+        - Главная
+      parameters:
+        - name: who_plays
+          in: query
+          description: С кем планируете играть?
+          schema:
+            type: string
+            example: alone
+
+        - name: quest_type
+          in: query
+          description: А какой формат выберете?
+          schema:
+            type: string
+            example: vr
+
+        - name: gamers
+          in: query
+          description: Сколько человек будет играть?
+          schema:
+            type: integer
+            example: 2
+
+        - name: has_child
+          in: query
+          description: В нашей команде есть игроки младше 18
+          schema:
+            type: boolean
+            example: false
+
+        - name: fear_level
+          in: query
+          description: Насколько должно быть страшно?
+          schema:
+            type: integer
+            example: 5
+
+        - name: complexity
+          in: query
+          description: Насколько должно быть сложно?
+          schema:
+            type: integer
+            example: 5
+
+        - name: has_cowardly_players
+          in: query
+          description: В нашей команде есть участники, которые не хотят бояться
+          schema:
+            type: boolean
+            example: false
+
+        - name: performance
+          in: query
+          description: Добавим актёров в квест?
+          schema:
+            type: boolean
+            example: true
+
+        - name: categories
+          in: query
+          description: А что нравится особенно?
+          schema:
+            type: string
+            example: семейные,18+,цирк
+
+        - name: quests
+          in: query
+          description: А где удобнее?
+          schema:
+            type: string
+            example: 101,200,777,656
+
+        - name: start_date
+          in: query
+          description: Дата начала
+          schema:
+            type: string
+            example: 14.03.2022
+
+        - name: end_date
+          in: query
+          description: Дата окончания
+          schema:
+            type: string
+            example: 18.03.2022
+
+        - name: start_time
+          in: query
+          description: Время начала
+          schema:
+            type: string
+            example: 12:30
+
+        - name: end_time
+          in: query
+          description: Время окончания
+          schema:
+            type: string
+            example: 16:30
+      
+      responses:
+        '200':
+          description: Filtered Quests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuestInfoWithPercent'
+        '401':
+          description: Unauthorized request
+  
+  /api/v2/quests/{questId}/last-photos/:
+    get:
+      summary: Список последних фотографий с игр квеста
+      tags:
+        - Квест
+      parameters:
+        - in: path
+          name: questId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Список последних фотографий с игр квеста
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestPhoto'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+  schemas:
+    QuestPhoto:
+      type: object
+      properties:
+        team_name:
+          type: string
+          example: Вентилятор
+        quests_completed:
+          type: integer
+          example: 3
+        last_game_date:
+          type: string
+          example: 09.03.2022
+        passed_in:
+          type: string
+          example: 1 час 27 минут
+        photo_url:
+          type: string
+          example: game_images/3.jpg
+        photo_thumbnail_url:
+          type: string
+          example: game_images/thumbnails/3.jpg
+    
+    QuestFeedback:
+      type: object
+      properties:
+        feedback_text:
+          type: string
+          example: Всё супер 👏 Михаил лучший оператор 🔥
+        user:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: Вася
+            last_name:
+              type: string
+              example: Пупкин
+            nickname:
+              type: string
+              example: Воевода2004
+            avatar:
+              type: string
+              example: media/u/user_avatar.jpg
+        expert:
+          type: object
+          properties:
+            title:
+              type: string
+              example: квест-стажёр
+            slug:
+              type: string
+              example: trainee
+        games_info:
+          type: object
+          properties:
+            quests_completed:
+              type: integer
+              example: 3
+            last_game_date:
+              type: string
+              example: 09.03.2022
+            last_game_time:
+              type: string
+              example: 12:30
+    
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Россия
+        phone_cc:
+          type: string
+          example: 7
+        iso_code:
+          type: string
+          example: ru
+        currency:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Российский Рубль
+            numcode:
+              type: string
+              example: 643
+            charcode:
+              type: string
+              example: RUB
+    
+    BlogShortPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Квест-хэйтер — профессия будущего
+        image:
+          type: string
+          example: blog_images/3.jpg
+        url:
+          type: string
+          example: https://claustrophobia.com/ru/blog/post/pervyy-marketpleys-razvlecheniy-v-rossii/
+    
+    BlogPromoPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        type:
+          type: string
+          enum: [ big, small ]
+        title:
+          type: string
+          example: Квест-хэйтер — профессия будущего
+        body:
+          type: string
+          example: Квест в реальности &mdash; это всегда увлекательное и запоминающееся событие
+        image:
+          type: string
+          example: blog_images/3.jpg
+        icon:
+          type: string
+          example: blog_images/icons/3.jpg
+        button_text:
+          type: string
+          example: Открыть
+        button_link:
+          type: string
+          example: https://claustrophobia.com
+        order:
+          type: integer
+          example: 0
+    
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 200633
+        name:
+          type: string
+          example: "Vladimir"
+        phone:
+          type: string
+          example: "79999938527"
+        email:
+          type: string
+          example: "ru.vgrishin@gmail.com"
+        is_staff:
+          type: boolean
+          example: false
+        is_superuser:
+          type: boolean
+          example: false
+    
+    City:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Москва
+        slug:
+          type: string
+          example: moscow
+        country:
+          type: string
+          example: Россия
+    
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 138
+        name:
+          type: string
+          example: Детский торговый центр ABC
+        city:
+          $ref: '#/components/schemas/City'
+        phone:
+          type: string
+          example: 0557-22-22-39
+        email:
+          type: string
+          example: abc@claustrophobia.com
+        address_ru:
+          type: string
+          example: пр. Чуй, д. 147/1
+        address_description:
+          type: string
+          example: Особенности локации и как добираться
+        parking_description:
+          type: string
+          example: Особенности парковки
+        latitude:
+          type: string
+          example: 42.875549346119016
+        longitude:
+          type: string
+          example: 74.61982191733546
+        metro:
+          $ref: '#/components/schemas/Station'
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 12
+        type:
+          type: string
+          example: GENERIC
+        city:
+          type: string
+          example: Москва
+        name:
+          type: string
+          example: VR
+        slug:
+          type: string
+          example: vr
+        link:
+          type: string
+          example: https://moscow.claustrophobia.com/ru/vr/?from=categories
+        order:
+          type: integer
+          example: 1
+        icon:
+          type: string
+          example: ti/favicon-32x32.png
+        image:
+          type: string
+          example: ti/images/image-256x256.png
+        description:
+          type: string
+          example: ""
+        hidden:
+          type: boolean
+          example: false
+        is_adult:
+          type: boolean
+          example: false
+        groups:
+          type: array
+          items:
+            type: string
+          example: [ квесты средней сложности,квесты для свиданий ]
+
+    Station:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [ station, district ]
+        city_id:
+          type: integer
+          example: 1
+        quests:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 123
+              latitude:
+                type: string
+                example: 42.875549346119016
+              longitude:
+                type: string
+                example: 74.61982191733546
+        name:
+          type: string
+          example: "Paveletskaya"
+        color:
+          type: string
+          example: 000fff
+
+    Showcase:
+      type: object
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+          example: performance
+        name:
+          type: string
+          example: Квесты с актёрами
+          description: Name field with html tags support
+        description:
+          type: string
+          example: Каждая игра из этой подборки — персональное шоу!
+          description: Description field with html tags support
+        promotion_type:
+          type: string
+          example: M
+          description: Promo block display area
+        promotion_type_display:
+          type: string
+          example: На главной
+        has_random_sorting:
+          type: boolean
+          description: Случайно ли сортируются квесты в витрине
+          example: false
+        items:
+          type: array
+          description: JSON Array of compilations (positions preserved)
+          items:
+            $ref: '#/components/schemas/Quest'
+    
+    Quest:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Philosopher's <b>stone</b>
+          description: Name field with html tags support
+        slug:
+          type: string
+          example: "philosophers_stone"
+        quest_page_url:
+          type: string
+          format: url
+          description: Quest page relative url
+          example: '/ru/performance/777/'
+        is_top_quest:
+          type: boolean
+          description: Нужно ли выводить квест первым в витрине
+          example: false
+        has_random_sort_priority:
+          type: boolean
+          description: Имеет ли квест приоритет при случайной сортировке
+          example: false
+        tags:
+          type: array
+          items:
+            type: string
+          example: [ Для большой компании, Простые, С актерами, Страшные ]
+        facts:
+          type: array
+          items:
+            type: string
+            example: Концовка игры может насчитывать свыше 170 вариаций
+        cover_url:
+          type: string
+          example: "https://media.claustrophobia.com/media/qb/100.jpg"
+          description: Product cover image URL (JPEG, optimized)
+        icon_url:
+          type: string
+          example: ""
+          description: Product icon image URL (PNG with transparency, optimized)
+        description:
+          type: string
+          example: This is <b>description</b>
+          description: Description field with html tags support
+        campaign_description:
+          type: string
+          example: Для сеансов с 21:00 доступен дополнительный режим прохождения по расширенному сценарию.
+        rating:
+          type: string
+          example: "0.91"
+          description: Рейтинг пользователей (по отзывам)
+        expert_rating:
+          type: string
+          example: "0.85"
+          description: Рейтинг экспертов
+        length:
+          type: integer
+          example: 60
+          description: Product (escape game) length in minutes0
+        age_restrictions:
+          type: object
+          properties:
+            symbol:
+              type: string
+              example: "18+"
+              description: Short symbol of age restrictions
+            verbose:
+              type: string
+              example: "With parents only"
+              description: Client-readable description of age restriction symbol
+        gamers:
+          type: object
+          properties:
+            min:
+              type: integer
+              example: 2
+              description: Minimal number of players for this escape room
+            max:
+              type: integer
+              example: 4
+              description: Maximal number of players for this escape room
+        location:
+          $ref: '#/components/schemas/Location'
+    
+    RecoverySucessful:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: 'Вам на почту отправлено письмо с дальнейшими инструкциями'
+        error:
+          type: boolean
+          example: false
+    
+    RecoveryError:
+      type: object
+      properties:
+        msg:
+          type: string
+          example: 'Введите корректный Email или номер телефона'
+        error:
+          type: boolean
+          example: true
+    
+    RecoveryData:
+      type: object
+      description: Recovery data
+      properties:
+        email:
+          type: string
+          description: Принимает email или номер телефона без +
+          example: 'user@claustrophobia.com'
+    
+    RegistrationSucessful:
+      type: object
+      properties:
+        status:
+          type: string
+          example: 'ok'
+        redirect_to:
+          type: string
+          example: '/ru/registration_complete/'
+        user_id:
+          type: integer
+          example: 529816
+        user_profile_url:
+          type: string
+          example: '/ru/gamers/529816/'
+
+    RegistrationError:
+      type: object
+      properties:
+        errors:
+          type: object
+          properties:
+            email:
+              type: string
+              example: 'Такой адрес уже зарегистрирован'
+            password:
+              type: string
+              example: 'Это обязательное поле'
+    
+    RegistrationData:
+      type: object
+      description: Registration data
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: 'markin@claustrophobia.com'
+        password:
+          type: string
+          example: 'qwerty12345'
+        is_subscribed_to_newsletter:
+          type: boolean
+          example: true
+        utm_marker:
+          type: string
+          example: 'utm_source=inst&utm_medium=direct&utm_campaign=alchimik'
+    
+    
+    SuccessfulLogin:
+      type: object
+      description: Successful login data
+      properties:
+        status:
+          type: string
+          example: 'ok'
+        page_url:
+          type: string
+          description: Redirect url
+          example: 'https://claustrophobia.com/ru/userprofile/529816/'
+        user_id:
+          type: integer
+          example: 529816
+        user_name:
+          type: string
+          example: 'markin'
+        user_phone_required:
+          type: boolean
+          description: 'Need to request a phone number?'
+          example: true
+        foreign:
+          type: boolean
+          description: Is the user a foreigner?
+          example: false
+    
+    LoginData:
+      type: object
+      description: Login data
+      properties:
+        login:
+          type: string
+          description: Принимает email или номер телефона без +
+          example: 'user@claustrophobia.com'
+        password:
+          type: string
+          example: 'qwerty12345'
+    
+    LoginError:
+      type: object
+      description: Login Error
+      properties:
+        status:
+          type: string
+          example: 'error'
+        errors:
+          type: object
+          properties:
+            password:
+              type: string
+              example: 'Некорректный пароль'
+    
+    TimeslotResponse:
+      type: array
+      items:
+        type: array
+        items:
+          anyOf:
+            - $ref: '#/components/schemas/Timeslot'
+            - $ref: '#/components/schemas/QuestInfo'
+    
+    Timeslot:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: Timeslot id
+            example: 4258793
+          
+          quest_id:
+            type: integer
+            example: 919
+          
+          dt:
+            type: string
+            description: Game date
+            example: '11 декабря'
+          
+          tm:
+            type: string
+            description: Game time in local format
+            example: '10:15'
+          
+          qid:
+            type: integer
+            description: Quest id
+            example: 100
+          
+          tm24:
+            type: string
+            description: Game time in 24 hour format
+            example: '16:30'
+          
+          av:
+            type: boolean
+            description: Timeslot is available for booking
+            example: false
+          
+          pp:
+            type: boolean
+            description: Game requires a mandatory prepayment for this timeslot
+            example: false
+          
+          partial_only:
+            type: boolean
+            description: Game requires a mandatory partial prepayment for this timeslot
+            example: false
+          
+          booked:
+            type: boolean
+            description: Timeslot is booked
+            example: false
+          
+          start:
+            type: string
+            format: datetime
+            description: Timeslot start date and time
+            example: '2021-12-06T23:30:00Z'
+          
+          start_local:
+            type: string
+            format: datetime
+            description: Timeslot start date and time in local format
+            example: '2021-12-07T09:00:00+03:00'
+          
+          start_date:
+            type: string
+            format: date
+            description: Timeslot start date and time in local format
+            example: '07.12.2021'
+          
+          started:
+            type: boolean
+            description: Timeslot has already started
+            example: false
+          
+          prepay_price:
+            type: integer
+            description: Prepayment price
+            example: 1100
+          
+          prices_by_tickets_count:
+            type: array
+            description: Prices by tickets count
+            items:
+              $ref: '#/components/schemas/Price'
+          
+          available_payment_backends:
+            $ref: '#/components/schemas/PaymentBackend'
+          
+          price:
+            type: integer
+            description: Timeslot price
+            example: 3100
+          
+          min_price:
+            type: integer
+            description: Minimum price per quest
+            example: 3100
+          
+          available_tickets:
+            type: integer
+            description: Number of available tickets
+            example: 4
+          
+          booked_tickets:
+            type: integer
+            description: Number of tickets booked
+            example: 0
+          
+          disable_booking:
+            type: boolean
+            description: The quest has no booking
+            example: false
+          
+          order_url:
+            type: string
+            description: Relative URL to book this timeslot
+            example: '/ru/quest/100/?book=4258794'
+          
+          analytics_price:
+            type: string
+            description: The cost of a slot for sending to analytics
+            example: '3100.0'
+          
+          locked:
+            type: boolean
+            description: Blocked for booking
+            example: false
+          
+          lock_text:
+            type: string
+            description: Timeslot lock text
+            example: 'call_to_book'
+
+          mode_prepay:
+            $ref: '#/components/schemas/ModePrepay'
+    
+    Price:
+      type: object
+      properties:
+        percentage:
+          type: number
+          format: float
+          multipleOf: 0.1
+          description: Multiplier of the cost of the game depending on the number of players
+          example: 100.0
+        price:
+          type: integer
+          description: Game price
+          example: 4100
+        gamers_count:
+          type: integer
+          description: Number of players
+          example: 2
+    
+    ModePrepay:
+      type: object
+      nullable: true
+      description: Prepayment mode
+      properties:
+        amount_partial_prepay:
+          type: integer
+          nullable: true
+          description: Prepayment amount (absolute value) in prime time
+          example: 0
+        
+        on_prepay:
+          type: boolean
+          description: Prime time and prepayment enabled
+          example: false
+        
+        percentage_partial_prepay:
+          type: integer
+          description: Percentage of partial prepayment in prime time
+          example: 25
+        
+        partial_prepay:
+          type: boolean
+          description: Partial prepayment in prime time enabled
+          example: false
+        
+        full_prepay:
+          type: boolean
+          description: Full prepayment in prime time enabled
+          example: false
+        
+        show_cash_button_with_prepay:
+          type: boolean
+          description: Show cash button with prepayment enabled at prime time
+          example: false
+    
+    PaymentBackend:
+      type: array
+      items:
+        type: string
+        description: Type and name of the payment method
+        example: [ 'kassa','Банковская карта' ]
+    
+    QuestInfo:
+      type: object
+      properties:
+        complexity_word:
+          type: string
+          description: Verbal difficulty level
+          example: 'средний'
+        
+        is_foreign:
+          type: boolean
+          description: The quest is abroad
+          example: false
+        
+        enable_priceline_min_price:
+          type: boolean
+          description: Show in the schedule the minimum price per person
+          example: false
+        
+        price_rule:
+          type: string
+          description: Ticket system
+          example: 'Прятки в Алькатрасе UPDATE 01.06.2021'
+        
+        id:
+          type: integer
+          description: Quest id
+          example: 777
+        
+        extra_info:
+          type: string
+          description: Additional text
+          example: 'Два раунда по 30 минут'
+        
+        allow_multibooking:
+          type: boolean
+          description: Allowed to book multiple games for one timeslot
+          example: false
+        
+        back_unblur_url:
+          type: string
+          format: url
+          description: Back unblur image  # Always returns an empty string here (hardcode)
+          example: ''
+        
+        back_blur_url:
+          type: string
+          format: url
+          description: Back blur image
+          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
+        
+        back_manual_url:
+          type: string
+          format: url
+          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
+        
+        quest_page_url:
+          type: string
+          format: url
+          description: Quest page relative url
+          example: '/ru/performance/777/'
+        
+        logo_url:
+          type: string
+          format: url
+          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
+        
+        logo_hover_url:
+          type: string
+          format: url
+          description: Logo hover link
+          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
+        
+        email:
+          type: string
+          format: email
+          description: Quest email
+          example: 'alcatraz@claustrophobia.com'
+        
+        length_string:
+          type: string
+          description: Quest duration in words
+          example: '60 минут'
+        
+        show_per_team_label_in_timetable:
+          type: boolean
+          description: Show \"Per team\" under the price in the price line
+          example: true
+        
+        analytics_currency_code:
+          type: string
+          description: Currency code to send to analytics
+          example: 'RUB'
+        
+        phone:
+          type: string
+          format: phone
+          description: Quest phone number
+          example: '+7-965-406-69-21'
+        
+        additional_services:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalService'
+        
+        available_languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailableLanguage'
+        
+        address:
+          type: string
+          format: address
+          description: Quest address
+          example: 'Волгоградский проспект, д. 32, корп. 8'
+        
+        city_name:
+          type: string
+          description: Quest city in local language
+          example: 'Москва'
+        
+        city_name_ru:
+          type: string
+          description: Quest city in Russian
+          example: 'Москва'
+        
+        prepay:
+          type: boolean
+          description: Prepayment for the quest is enabled
+          example: true
+        
+        tags_string:
+          type: string
+          description: Quest tags
+          example: 'Для большой компании, Простые, С актерами, Страшные'
+        
+        name:
+          type: string
+          description: Quest name
+          example: 'Прятки в Алькатрасе'
+        
+        show_from_in_timetable:
+          type: boolean
+          description: Show \"From\" above the price in the price line
+          example: false
+        
+        quest_type:
+          type: string
+          description: Quest type
+          example: 'performance'
+        
+        length:
+          type: integer
+          description: Quest length
+          example: 60
+        
+        location_metro:
+          type: string
+          description: Metro next to the location
+          example: 'Волгоградский проспект'
+        
+        gamers_count_string:
+          type: string
+          description: Number of players allowed by text
+          example: '1-30 участников'
+        
+        currency_code:
+          type: string
+          description: Quest currency code
+          example: 'RUB'
+        
+        timeslot_simple_view:
+          type: boolean
+          description: Timeslot simple view mode
+          example: False
+    
+    QuestInfoWithPercent:
+      type: object
+      properties:
+        similarity:
+          type: integer
+          example: 95
+        
+        id:
+          type: integer
+          description: Quest id
+          example: 777
+        name:
+          type: string
+          description: Quest name
+          example: 'Прятки в Алькатрасе'
+        rating:
+          type: string
+          example: "9.5"
+        gamers_count_string:
+          type: string
+          description: Number of players allowed by text
+          example: '1-30 участников'
+        length_string:
+          type: string
+          description: Quest duration in words
+          example: '60 минут'
+        length:
+          type: integer
+          description: Quest length
+          example: 60
+        complexity:
+          type: integer
+          example: 3
+        fear_level:
+          type: integer
+          example: null
+        description_ru:
+          type: string
+          example: Когда-то в этом доме гостеприимно горел свет и звучал детский смех, пока однажды вся семья Кригель, жившая здесь, не исчезла. Леденящий душу ужас охватывает любого, кто осмеливается приблизиться к мрачному дому. Но разве вас это остановит?
+        quest_page_url:
+          type: string
+          format: url
+          description: Quest page relative url
+          example: '/ru/performance/777/'
+        back_blur:
+          type: string
+          format: url
+          description: Back blur image
+          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
+        logo_hover:
+          type: string
+          format: url
+          description: Logo hover link
+          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
+        location:
+          type: object
+          properties:
+            metro:
+              type: string
+              description: Metro next to the location
+              example: 'Волгоградский проспект'
+            
+            address:
+              type: string
+              format: address
+              description: Quest address
+              example: 'Волгоградский проспект, д. 32, корп. 8'
+            
+            phone:
+              type: string
+              format: phone
+              description: Quest phone number
+              example: '+7-965-406-69-21'
+            
+            email:
+              type: string
+              format: email
+              description: Quest email
+              example: 'alcatraz@claustrophobia.com'
+    
+    AdditionalService:
+      type: object
+      description: Additional services for the quest
+      properties:
+        id:
+          type: integer
+          description: Service id
+          example: 1
+        
+        price:
+          type: integer
+          description: Service price
+          example: 1200
+        
+        name:
+          type: string
+          description: Service name
+          example: 'Аниматор'
+        
+        multiple:
+          type: boolean
+          description: Multiple service
+          example: false
+        
+        maximum:
+          type: integer
+          description: Maximum amount
+          example: 2
+        
+        description:
+          type: string
+          description: Service description
+          example: 'Пройдем квест вместе с детьми и проследим, чтобы все было в порядке :) Минимальный возраст игроков указан в описании квеста, услуга оплачивается на месте'
+    
+    AvailableLanguage:
+      type: object
+      description: Available quest languages
+      properties:
+        code:
+          type: string
+          description: Language code
+          example: 'ru'
+        
+        name:
+          type: string
+          description: Language name
+          example: 'Russian'
+    
+    BookedTimeslotResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Timeslot id
+          example: 4258793
+        
+        dt:
+          type: string
+          description: Game date
+          example: '11 декабря'
+        
+        tm:
+          type: string
+          description: Game time in local format
+          example: '10:15'
+        
+        qid:
+          type: integer
+          description: Quest id
+          example: 100
+        
+        tm24:
+          type: string
+          description: Game time in 24 hour format
+          example: '16:30'
+        
+        av:
+          type: boolean
+          description: Timeslot is available for booking
+          example: false
+        
+        pp:
+          type: boolean
+          description: Game requires a mandatory prepayment for this timeslot
+          example: false
+        
+        booked:
+          type: boolean
+          description: Timeslot is booked
+          example: false
+        
+        start:
+          type: string
+          format: datetime
+          description: Timeslot start date and time
+          example: '2021-12-06T23:30:00Z'
+        
+        start_local:
+          type: string
+          format: datetime
+          description: Timeslot start date and time in local format
+          example: '2021-12-07T09:00:00+03:00'
+        
+        start_date:
+          type: string
+          format: date
+          description: Timeslot start date and time in local format
+          example: '07.12.2021'
+        
+        started:
+          type: boolean
+          description: Timeslot has already started
+          example: false
+        
+        prepay_price:
+          type: integer
+          description: Prepayment price
+          example: 1100
+        
+        prices_by_tickets_count:
+          type: array
+          description: Prices by tickets count
+          items:
+            $ref: '#/components/schemas/Price'
+        
+        available_payment_backends:
+          type: array
+          description: Available payment methods
+          items:
+            $ref: '#/components/schemas/PaymentBackend'
+        
+        price:
+          type: integer
+          description: Timeslot price
+          example: 3100
+        
+        min_price:
+          type: integer
+          description: Minimum price per quest
+          example: 3100
+        
+        available_tickets:
+          type: integer
+          description: Number of available tickets
+          example: 4
+        
+        disable_booking:
+          type: boolean
+          description: The quest has no booking
+          example: false
+        
+        order_url:
+          type: string
+          description: Relative URL to book this timeslot
+          example: '/ru/quest/100/?book=4258794'
+        
+        analytics_price:
+          type: string
+          description: The cost of a slot for sending to analytics
+          example: '3100.0'
+        
+        locked:
+          type: boolean
+          description: Blocked for booking
+          example: false
+        
+        lock_text:
+          type: string
+          description: Timeslot lock text
+          example: 'call_to_book'
+        
+        quest:
+          $ref: '#/components/schemas/BookQuestInfo'
+        
+        currency_sign:
+          type: string
+          description: Currency sign
+          example: '&#8381;'
+        
+        partial_only:
+          type: boolean
+          description: Game requires a mandatory partial prepayment for this timeslot
+          example: false
+        
+        partial_prepay:
+          type: boolean
+          description: Partial prepayment enabled
+          example: false
+        
+        existing_game:
+          $ref: '#/components/schemas/ExistingGame'
+        
+        gtm_params:
+          $ref: '#/components/schemas/Gtm'
+        
+        additional_services:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalService'
+        
+        mode_prepay:
+          $ref: '#/components/schemas/ModePrepay'
+    
+    Gtm:
+      type: object
+      properties:
+        currency_code:
+          type: string
+          description: Currency code
+          example: 'RUB'
+        
+        id:
+          type: integer
+          description: Quest id
+          example: 100
+        
+        category:
+          type: string
+          description: Quest city name
+          example: 'Москва'
+        
+        variant:
+          type: string
+          description: Quest type
+          example: 'quest'
+        
+        brand:
+          type: string
+          description: Quest complexity
+          example: 'средний'
+        
+        dimension6:
+          type: string
+          description: Quest tags
+          example: 'Для 1-2 игроков, 🎄 Новый год, 💝 14 февраля'
+        
+        dimension7:
+          type: string
+          description: Allowed number of players
+          example: '2-4 игроков'
+        
+        dimension8:
+          type: integer
+          description: QUest duration
+          example: 60
+        
+        price:
+          type: string
+          description: Quest price
+          example: '2600.0'
+        
+        name:
+          type: string
+          description: Quest name
+          example: 'Философский камень'
+    
+    BookQuestInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Quest id
+          example: 100
+        
+        phone:
+          type: string
+          format: phone
+          description: Quest phone number
+          example: '+7-965-406-69-21'
+        
+        email:
+          type: string
+          format: email
+          description: Quest email
+          example: 'alcatraz@claustrophobia.com'
+        
+        metro:
+          type: string
+          description: Metro next to the location
+          example: 'Волгоградский проспект'
+        
+        address:
+          type: string
+          format: address
+          description: Quest address
+          example: 'Волгоградский проспект, д. 32, корп. 8'
+        
+        back_blur:
+          type: string
+          format: url
+          description: Back blur image
+          example: 'https://media.claustrophobia.com/media/qb/737_back_blur_c31a02b818.jpg'
+        
+        back_unblur:
+          type: string
+          format: url
+          description: Back blur image
+          example: 'https://media.claustrophobia.com/media/qb/737_back_unblur_00a84e5359.jpg'
+        
+        hide_adult_content:
+          type: boolean
+          description: Adult content
+          example: false
+        
+        logo:
+          type: string
+          format: url
+          description: Logo link
+          example: 'https://media.claustrophobia.com/media/l/%D0%BC%D1%81%D0%BA_%D0%BA%D1%83%D0%BB%D0%B8%D1%81%D1%8B.png'
+        
+        logo_hover:
+          type: string
+          format: url
+          description: Logo hover link
+          example: 'https://media.claustrophobia.com/media/l/737_logo_hover_060458102a.png'
+        
+        gamers_count:
+          type: integer
+          description: Number of players
+          example: 2
+        
+        rating_norm:
+          type: string
+          description: Rating based on normalization
+          example: '5.76'
+        
+        gamers_count_string:
+          type: string
+          description: Number of players allowed by text
+          example: '1-30 участников'
+        
+        length_string:
+          type: string
+          description: Quest duration in words
+          example: '60 минут'
+        
+        quest_type:
+          type: string
+          description: Quest type
+          example: 'performance'
+        
+        city_id:
+          type: integer
+          description: City id (default 1 — Moscow)
+          example: 1
+        
+        city_name:
+          type: string
+          description: Quest city name
+          example: 'Москва'
+        
+        country_name:
+          type: string
+          description: Quest country name
+          example: 'Россия'
+        
+        quest_page_url:
+          type: string
+          format: url
+          description: Quest page relative url
+          example: '/ru/performance/777/'
+        
+        prepay:
+          type: boolean
+          description: Prepayment for the quest is enabled
+          example: true
+        
+        complexity_string:
+          type: string
+          description: Verbal difficulty level
+          example: 'средний'
+        
+        complexity_in_locks:
+          type: array
+          description: Difficulty of the quest in locks (unlocked or invisible)
+          items:
+            type: string
+          example: [ "locked", "locked", "locked", "unlocked", "unlocked" ]
+        
+        adult_content:
+          type: string
+          description: Age qualification
+          example: '8'
+        
+        available_languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailableLanguage'
+        
+        min_gamers:
+          type: integer
+          description: Minimum number of players
+          example: 1
+        
+        max_gamers:
+          type: integer
+          description: Maximum number of players
+          example: 8
+        
+        ym_shop_id:
+          type: integer
+          description: Yandex Money shop id
+          example: 811615
+        
+        fear_level_in_ghosts:
+          type: array
+          description: The level of fear (filled or empty)
+          items:
+            type: string
+          example: [ "filled", "filled", "filled", "filled", "filled" ]
+        
+        allow_multibooking:
+          type: boolean
+          description: Allowed to book multiple games for one timeslot
+          example: false
+    
+    ExistingGame:
+      type: object
+      nullable: true
+      description: Existing game
+      properties:
+        id:
+          type: integer
+          description: Game id
+          example: 1182783
+        
+        timeslot:
+          type: integer
+          description: Timeslot id
+          example: 3004725
+        
+        owner:
+          type: integer
+          description: Owner id
+          example: 452624
+        
+        tickets_count:
+          type: integer
+          description: Tickets count
+          example: 0
+        
+        language_code:
+          type: string
+          description: Language code
+          example: 'ru'
+
+        promo_code:
+          type: string
+          description: Promo code
+          example: 'AAA2A22A'
+        
+        booking_price:
+          type: integer
+          description: Booking price
+          example: 5900
+
+        partial_prepay:
+          type: boolean
+          description: Partial prepay enabled
+          example: false
+        
+        prepay_price:
+          type: integer
+          description: Prepay price
+          example: 5900
+        
+        status:
+          type: string
+          description: Game status
+          example: 'completed'
+        
+        expires_in:
+          type: integer
+          description: Game expires in
+          example: -61011548
+
+        additional_services_total_amount:
+          type: integer
+          description: Number of the additional services
+          example: 0
+        
+        discount:
+          type: string
+          description: Game discount
+          example: 'no'
+
+        payment:
+          type: string
+          description: Payment type
+          example: 'online'
+        
+        extra_price:
+          type: integer
+          description: Extra price
+          example: 0
+        
+        extra_price_payment:
+          type: string
+          description: Extra price payment
+          example: 'no'
+
+        team_name:
+          type: string
+          description: Game discount
+          example: 'SuperStars'
+        
+        available_payment_backends:
+          type: array
+          description: Available payment methods
+          items:
+            $ref: '#/components/schemas/PaymentBackend'
+
+security:
+  - bearerAuth: [ ]
