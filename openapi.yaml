@@ -906,6 +906,30 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Quest'
+
+  /api/v2/showcase/{showcaseId}/:
+    get:
+      summary: Содержимое витрины
+      operationId: getShowcaseById
+      tags:
+        - Витрина
+      parameters:
+        - in: path
+          name: showcaseId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Showcase ID
+      responses:
+        '200':
+          description: Showcase object
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Showcase'
+
   
   /api/v2/cities/{cityId}/tags/{questTagType}/:
     get:
@@ -1471,6 +1495,23 @@ paths:
                 items:
                   $ref: '#/components/schemas/QuestPhoto'
 
+  /api/v2/loyalty/charity/:
+    get:
+      summary: Список благотворительных организаций
+      operationId: getCharityVenues
+      tags:
+        - Программа лояльности
+      responses:
+        '200':
+          description: A JSON array of CharityVenue objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CharityVenue'
+      
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1479,6 +1520,25 @@ components:
       bearerFormat: JWT
   
   schemas:
+
+    CharityVenue:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Фонд «Собаки, которые любят»
+        description:
+          type: string
+          example: Помогаем неравнодушным людям лечить и находить дом бездомным животным
+        photo_url:
+          type: string
+          example: https://media.claustrophobia.com/media/3.jpg
+        logo_url:
+          type: string
+          example: https://media.claustrophobia.com/media/3.jpg
+
+        
+
     QuestPhoto:
       type: object
       properties:
