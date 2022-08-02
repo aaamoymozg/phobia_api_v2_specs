@@ -1510,7 +1510,110 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/CharityVenue'
-      
+
+  /api/v2/vacancies/:
+    get:
+      summary: Список вакансий
+      operationId: getVacancyList
+      tags:
+        - Вакансии
+      responses:
+        '200':
+          description: A JSON array of Vacancy objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vacancy'
+
+  /api/v2/vacancies/{vacancyId}:
+    get:
+      summary: Вакансия
+      operationId: getVacancyById
+      tags:
+        - Вакансии
+      parameters:
+        - in: path
+          name: vacancyId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The Vacancy ID
+      responses:
+        '200':
+          description: A JSON array of Vacancy objects
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Vacancy'
+
+  /api/v2/vacancies/{vacancyId}/feedback:
+    post:
+      summary: Обратная связь из формы Вакансии
+      description: Принимает данные из формы обратной связи
+      operationId: postVacancyFeedback
+      tags:
+        - Вакансии
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Иван Петрович Иванов
+                email:
+                  type: string
+                  example: ivan@mail.ru
+                phone:
+                  type: string
+                  example: +7 900 000-00-00
+                comment:
+                  type: string
+                  example: например, о вашем опыте работы или почему ты хочешь работать именно у нас
+                cv:
+                  type: string
+                  format: binary
+
+      responses:
+        '200':
+          description: Сообщение отправлено
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Сообщение отправлено.
+
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: Обязательное поле.
+                  email:
+                    type: string
+                    example: Обязательное поле.
+                  phone:
+                    type: string
+                    example: Обязательное поле.
+                  comment:
+                    type: string
+                    example: Обязательное поле.
+                  cv:
+                    type: string
+                    example: Обязательное поле.
 
 components:
   securitySchemes:
@@ -1520,6 +1623,25 @@ components:
       bearerFormat: JWT
   
   schemas:
+
+    Vacancy:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Арт-директор в контент-парк
+        description:
+          type: string
+          example: Обязанности - управление внутренней операционной деятельностью коллектива, постановка задач; привлечение и последующая работа с компаниями и брендами в рамках площадки; запуск новых партнерских активаций ...
+        annotation:
+          type: string
+          example: полная занятость, опыт работы 1–3 года
+        city_name:
+          type: string
+          example: Москва
 
     CharityVenue:
       type: object
