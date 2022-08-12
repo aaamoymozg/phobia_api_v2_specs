@@ -36,6 +36,15 @@ paths:
                 comment:
                   type: string
                   example: Описание проблемы
+                tag:
+                  type: string
+                  example: Contacts
+              required:
+                - name
+                - email
+                - phone
+                - comment
+
       
       responses:
         '200':
@@ -1527,6 +1536,52 @@ paths:
                 items:
                   $ref: '#/components/schemas/Vacancy'
 
+  /api/v2/about_us/{eventYear}:
+    get:
+      summary: Получить событие "О нас" для выбранного города
+      operationId: getAboutUsEventByYear
+      tags:
+        - О нас
+      parameters:
+        - in: path
+          name: eventYear
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Target Event year
+      responses:
+        '200':
+          description: A JSON array of AboutUsEvent objects
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/AboutUsEvent'
+
+  /api/v2/faq/{faqTag}:
+    get:
+      summary: Получить список вопросов и ответов для раздела  FAQ
+      operationId: getFAQListByTag
+      tags:
+        - FAQ
+      parameters:
+        - in: path
+          name: faqTag
+          required: true
+          schema:
+            type: string
+          description: Target FAQ list tag
+      responses:
+        '200':
+          description: A JSON array of FAQQA objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FAQQA'
+
   /api/v2/vacancies/{vacancyId}:
     get:
       summary: Вакансия
@@ -1623,6 +1678,36 @@ components:
       bearerFormat: JWT
   
   schemas:
+
+    FAQQA:
+      type: object
+      properties:
+        category:
+          type: string
+          example: Сертификаты
+        question:
+          type: string
+          example: Мне подарили сертификат, как им воспользоваться?
+        answer:
+          type: string
+          example: Войдите в свой профиль на сайте. Если вы еще не зарегистрированы, сделайте это, используя электронную почту или аккаунт в социальных сетях
+
+    AboutUsEvent:
+      type: object
+      properties:
+        year:
+          type: integer
+          example: 2013
+        title:
+          type: string
+          example: Клаустрофобия становится первой квест-компанией в ...
+        description:
+          type: string
+          example: Формат, который до этого был доступен только в формате видео игры, стал полностью реальным.
+        image:
+          type: string
+          example: https://media.claustrophobia.com/media/3.jpg
+
 
     Vacancy:
       type: object
@@ -2600,7 +2685,6 @@ components:
         similarity:
           type: integer
           example: 95
-        
         id:
           type: integer
           description: Quest id
