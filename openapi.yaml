@@ -1636,9 +1636,15 @@ components:
         description:
           type: string
           example: Обязанности - управление внутренней операционной деятельностью коллектива, постановка задач; привлечение и последующая работа с компаниями и брендами в рамках площадки; запуск новых партнерских активаций ...
-        annotation:
+        employment type:
           type: string
-          example: полная занятость, опыт работы 1–3 года
+          example: полная занятость
+        work_experience:
+          type: string
+          example: 1–3 года
+        city_id:
+          type: integer
+          example: 1
         city_name:
           type: string
           example: Москва
@@ -1652,6 +1658,9 @@ components:
         description:
           type: string
           example: Помогаем неравнодушным людям лечить и находить дом бездомным животным
+        action_url:
+          type: string
+          example: https://dobrodomik.ru
         photo_url:
           type: string
           example: https://media.claustrophobia.com/media/3.jpg
