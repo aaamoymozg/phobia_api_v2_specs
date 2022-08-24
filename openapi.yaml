@@ -977,6 +977,7 @@ paths:
       operationId: getShortBlogPosts
       tags:
         - Главная
+        - Блог
       responses:
         '200':
           description: A JSON array of Post objects
@@ -993,6 +994,7 @@ paths:
       operationId: getPromoBlogPosts
       tags:
         - Главная
+        - Блог
       responses:
         '200':
           description: A JSON array of Post objects
@@ -1365,6 +1367,37 @@ paths:
                         ]
                       }
                     ]
+
+  /api/v2/search/:
+      get:
+        summary: Поиск по слову
+        description: Returns Search Results 
+        operationId: getSearchResults
+        tags:
+          - Поиск
+        parameters:
+          - name: q
+            in: query
+            description: Query
+            schema:
+              type: string
+              example: Philosopher
+          - name: tag
+            in: query
+            description: Query
+            schema:
+              type: string
+              example: scary
+        responses:
+          '200':
+            description: Filtered Quests
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/SearchResult'
+          '401':
+            description: Unauthorized request
+
   
   /api/v2/quests/search/:
     get:
@@ -3272,6 +3305,26 @@ components:
           description: Available payment methods
           items:
             $ref: '#/components/schemas/PaymentBackend'
+
+    SearchResult:
+      type: object
+      description: Search Result
+      properties:
+        quests:
+          type: array
+          description: Quests list
+          items:
+            $ref: '#/components/schemas/Quest'
+        showcases:
+          type: array
+          description: Showcases list
+          items:
+            $ref: '#/components/schemas/Showcase'
+        locations:
+          type: array
+          description: Showcases list
+          items:
+            $ref: '#/components/schemas/Location'
 
 security:
   - bearerAuth: [ ]
