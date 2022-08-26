@@ -1368,7 +1368,7 @@ paths:
                       }
                     ]
 
-  /api/v2/search/:
+  /api/v2/search:
       get:
         summary: Поиск по слову
         description: Returns Search Results 
