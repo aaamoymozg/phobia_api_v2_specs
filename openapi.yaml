@@ -1703,6 +1703,36 @@ paths:
                     type: string
                     example: Обязательное поле.
 
+  /api/v2/promobanners:
+    get:
+      summary: Список баннеров
+      operationId: getBannersList
+      tags:
+        - Баннеры
+      parameters:
+          - name: city_id
+            in: query
+            description: Query
+            schema:
+              type: integer
+              example: 1
+          - name: tag
+            in: query
+            description: Query tag (one of "vacancies" or "about_us" at present moment)
+            schema:
+              type: string
+              example: vacancies
+      responses:
+        '200':
+          description: A JSON array of PromoBanner objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PromoBanner'
+
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1711,6 +1741,22 @@ components:
       bearerFormat: JWT
   
   schemas:
+    
+    PromoBanner:
+      type: object
+      properties: 
+        id:
+          type: integer
+        action_url:
+          type: string
+        action_title:
+          type: string
+        action_description:
+          type: string
+          description: разрешение 550x420, либо соотношение сторон 1.3 к 1; 
+        image_url:
+          type: string
+
 
     FAQQA:
       type: object
