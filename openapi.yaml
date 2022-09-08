@@ -2173,6 +2173,14 @@ components:
         slug:
           type: string
           example: "philosophers_stone"
+        is_announced:
+          type: boolean
+          description: Flag that marks quest in Announcement mode (no opened schedule)
+          example: false
+        is_unavailable:
+          type: boolean
+          description: Flag that marks quest in Unavailable mode (no more selling)
+          example: false
         quest_page_url:
           type: string
           format: url
