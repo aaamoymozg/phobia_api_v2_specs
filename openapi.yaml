@@ -1732,6 +1732,30 @@ paths:
                 items:
                   $ref: '#/components/schemas/PromoBanner'
 
+  /api/v2/booking-access:
+    get:
+      summary: Check booking access token from get_params (token=).
+      operationId: checkBookingAccessToken
+      tags:
+        - Разное
+      parameters:
+          - name: token
+            in: query
+            description: Booking token from get-params
+            schema:
+              type: string
+              example: aabbccddeeff
+          - name: product_id
+            in: query
+            description: Quest ID
+            schema:
+              type: integer
+              example: 443
+      responses:
+        '200':
+          description: Have access to booking interface on product_id page
+        '403':
+          description: Have NO access to booking interface on product_id page
 
 components:
   securitySchemes:
