@@ -500,6 +500,21 @@ paths:
                   type: integer
                   description: Number of tickets
                   example: 0
+
+                user_name:
+                  type: string
+                  description: Client name (optional)
+                  example: 'Marina'
+
+                user_phone:
+                  type: string
+                  description: Client phone (optional)
+                  example: '79999999999'
+
+                user_email:
+                  type: string
+                  description: Client email (optional)
+                  example: 'email@domain.com'
                 
                 language_code:
                   type: string
@@ -526,6 +541,7 @@ paths:
               
               required:
                 - timeslot
+                - tickets_count
       
       responses:
         '200':
@@ -621,6 +637,49 @@ paths:
           description: Forbidden
   
   /api/usecertificate/:
+    get:
+      summary: Информация о скидке и сроке действия сертификата
+      description: Get certificate information
+      operationId: getCertificateData
+      tags:
+        - Расписание и бронирование
+      parameters:
+        - name: certificate_serial
+          in: query
+          description: Certificate Serial
+          required: true
+          schema:
+            type: integer
+            example: 123
+        - name: certificate_code
+          in: query
+          description: Сertificate code
+          required: true
+          schema:
+            type: string
+            example: "1111 1111 1111 1111"
+      
+      responses:
+        '200':
+          description: certificate information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  amount:
+                    type: string
+                    example: "1000 р."
+                  type:
+                    type: string
+                    example: "Standart"
+                  expires_at:
+                    type: string
+                    format: date
+                    example: "2019-05-17"
+                  is_used:
+                    type: boolean
+
     post:
       summary: "Шаг 3: Оплата сертификатом"
       description: Use Certificate
@@ -1756,6 +1815,42 @@ paths:
           description: Have access to booking interface on product_id page
         '403':
           description: Have NO access to booking interface on product_id page
+
+  /api/v2/user/bookings:
+    get:
+      summary: Get User Booking List
+      operationId: getUserBookings
+      tags:
+        - Действия с пользователем
+      responses:
+        '200':
+          description: List of user bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExistingGame'
+    delete:
+      summary: Cancel existing booking
+      operationId: deleteBookingById
+      tags:
+        - Действия с пользователем
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookingId:
+                  type: integer
+                  example: 1282300
+      responses:
+        '200':
+          description: Deletion succeeded
+        '400':
+          description: Authorization issue
 
 components:
   securitySchemes:
