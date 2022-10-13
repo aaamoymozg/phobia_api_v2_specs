@@ -1850,7 +1850,7 @@ paths:
         '200':
           description: Deletion succeeded
         '400':
-          description: Authorization issue
+          description: Unable to cancel booking
 
 components:
   securitySchemes:
@@ -2889,6 +2889,15 @@ components:
           type: boolean
           description: Timeslot simple view mode
           example: False
+        complexity_level:
+          type: integer
+          description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
+          example: 4
+        scare_level:
+          type: integer
+          description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
+          example: 4
+
     
     QuestInfoWithPercent:
       type: object
