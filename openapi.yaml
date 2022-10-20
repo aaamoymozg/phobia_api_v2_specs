@@ -2641,6 +2641,16 @@ components:
             description: The cost of a slot for sending to analytics
             example: '3100.0'
           
+          urgent_sell:
+            type: boolean
+            description: Percent sign flag for Timeslot View
+            example: false
+
+          hot_promo:
+            type: boolean
+            description: "Hot" sign flag for Timeslot View
+            example: false
+
           locked:
             type: boolean
             description: Blocked for booking
