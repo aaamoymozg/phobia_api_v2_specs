@@ -2648,7 +2648,7 @@ components:
 
           hot_promo:
             type: boolean
-            description: "Hot" sign flag for Timeslot View
+            description: "'Hot' sign flag for Timeslot View"
             example: false
 
           locked:
