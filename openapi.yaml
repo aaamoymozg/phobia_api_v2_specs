@@ -2263,6 +2263,9 @@ components:
           type: string
           example: Каждая игра из этой подборки — персональное шоу!
           description: Description field with html tags support
+        image:
+          type: string
+          example: https://media.claustrophobia.com/media/3.jpg
         promotion_type:
           type: string
           example: M
