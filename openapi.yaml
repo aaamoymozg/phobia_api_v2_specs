@@ -2805,7 +2805,12 @@ components:
           format: email
           description: Quest email
           example: 'alcatraz@claustrophobia.com'
-        
+
+        adilt_content:
+          type: string
+          description: String - descriotion for ages restrictions
+          example: 'Allowed with parents'
+
         length_string:
           type: string
           description: Quest duration in words
@@ -2826,7 +2831,7 @@ components:
           format: phone
           description: Quest phone number
           example: '+7-965-406-69-21'
-        
+
         additional_services:
           type: array
           items:
