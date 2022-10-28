@@ -232,6 +232,65 @@ paths:
                     type: string
                     example: Пользователя не существует
   
+  /api/v2/simple-send-sms-code/:
+    post:
+      summary: Запросить код подтверждения телефона
+      description: Get just SMS Code
+      operationId: GetJustSMSCode
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: Recovery data
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - "phone"
+              properties:
+                name:
+                  type: string
+                  example: "ivan"
+                    
+                phone:
+                  type: string
+                  example: "+79689588604"
+      
+      responses:
+        '200':
+          description: Recovery sucessful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: Вам отправлено новое сообщение
+        
+        '400':
+          description: Bad Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Некорректный номер телефона
+        
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Слишком много попыток отправки sms
+        
+  
   /api/v2/phone_confirmation/:
     post:
       summary: Подтверждение номера телефона
@@ -1574,6 +1633,83 @@ paths:
         '401':
           description: Unauthorized request
   
+  /api/v2/setlang/:
+      post:
+        summary: Задать язык
+        description: set Language 
+        operationId: setLanguage
+        tags:
+          - Главная
+        requestBody:
+          description: set Language
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - "next"
+                  - "language"
+                properties:
+                  next:
+                    type: string
+                    example: "/quest/153/"
+                    description: "redirect url"
+                  language:
+                    type: string
+                    example: "en"
+                      
+        responses:
+          '200':
+            description: set Language
+            content:
+              application/json:
+                 schema:
+                  type: string
+                  example: "success"
+          '403':
+            description: Unauthorized request
+
+  /api/v2/newsletter/subscribe/:
+      post:
+        summary: Подписаться на рассылку
+        description: subcsribe email 
+        operationId: subscribeEmail
+        tags:
+          - Главная
+        requestBody:
+          description: subscribe email
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - "email"
+                properties:
+                  email:
+                    type: string
+                    example: "luxury_girl@claustrophobia.com"
+                      
+        responses:
+          '200':
+            description: subscribe email
+            content:
+              application/json:
+                 schema:
+                  type: string
+                  example: "success"
+          '400':
+            description: Bad Requests
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      example: error
+
   /api/v2/quests/{questId}/last-photos/:
     get:
       summary: Список последних фотографий с игр квеста
