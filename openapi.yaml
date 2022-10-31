@@ -710,13 +710,6 @@ paths:
           schema:
             type: integer
             example: 123
-        - name: certificate_code
-          in: query
-          description: Сertificate code
-          required: true
-          schema:
-            type: string
-            example: "1111 1111 1111 1111"
       
       responses:
         '200':
