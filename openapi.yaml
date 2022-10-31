@@ -1164,7 +1164,30 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Station'
-  
+
+  /api/v2/quests/{questId}/:
+    get:
+      summary: get Quest frontend detail object by Id
+      operationId: getQuestFrontendDetailById
+      tags:
+        - Квест
+      parameters:
+      - in: path
+        name: questId
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        '200':
+          description: Get Frontend-optimized object for Quest
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestFrontendDetail'
+    
   /api/v2/quests/{questId}/feedbacks/:
     get:
       summary: Список отзывов на квест
@@ -3663,6 +3686,35 @@ components:
           description: Showcases list
           items:
             $ref: '#/components/schemas/Location'
+
+    QuestFrontendDetail:
+      type: object
+      description: Frontend-optimized product object
+      properties:
+        quest:
+          type: object
+          description: Quest object
+          $ref: '#/components/schemas/QuestInfo'
+        feedbacks:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestFeedback'
+        last_photos:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestPhoto'
+        short_timetable:
+          type: array
+          items:
+            $ref: '#/components/schemas/Timeslot'
+        location_quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestInfo'
+        recommended_quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestInfo'
 
 security:
   - bearerAuth: [ ]
