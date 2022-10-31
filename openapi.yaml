@@ -1088,6 +1088,22 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Tag'
+
+  /api/v2/blog/headings/:
+    get:
+        summary: Get Blog headings
+        operationId: getPromoBlogHeadingList
+        tags:
+          - Блог
+        responses:
+          '200':
+            description: A JSON array of BlogHeading objects
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/BlogHeading'
   
   /api/v2/blog/short-posts/:
     get:
@@ -1113,6 +1129,13 @@ paths:
       tags:
         - Главная
         - Блог
+      parameters:
+        - name: heading_id
+          in: query
+          description: Specify heading ID to filter PromoBlogPost by BlogHeading
+          schema:
+            type: integer
+            example: 1
       responses:
         '200':
           description: A JSON array of Post objects
@@ -1122,6 +1145,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BlogPromoPost'
+
+  /api/v2/blog/promo-posts/{postId}:
+    get:
+      summary: Promo post detail
+      operationId: getPromoBlogPostById
+      tags:
+        - Блог
+      responses:
+        '200':
+          description: Detail PromoPost object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPromoPost'
   
   /api/v2/countries/:
     get:
@@ -2209,7 +2246,17 @@ components:
             charcode:
               type: string
               example: RUB
-    
+
+    BlogHeading:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Перформансы и квесты с актерами
+
     BlogShortPost:
       type: object
       properties:
@@ -2253,6 +2300,10 @@ components:
         button_link:
           type: string
           example: https://claustrophobia.com
+        headings:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogHeading'
         order:
           type: integer
           example: 0
