@@ -3727,9 +3727,14 @@ components:
             $ref: '#/components/schemas/Showcase'
         locations:
           type: array
-          description: Showcases list
+          description: location list
           items:
             $ref: '#/components/schemas/Location'
+        posts:
+          type: array
+          description: posts list
+          items:
+            $ref: '#/components/schemas/BlogShortPost'
 
     QuestFrontendDetail:
       type: object
