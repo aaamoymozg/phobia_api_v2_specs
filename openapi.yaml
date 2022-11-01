@@ -1047,7 +1047,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/Showcase'
 
   
@@ -1142,6 +1141,13 @@ paths:
   /api/v2/blog/promo-posts/{postId}:
     get:
       summary: Promo post detail
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
       operationId: getPromoBlogPostById
       tags:
         - Блог
@@ -1883,7 +1889,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/Vacancy'
 
   /api/v2/vacancies/{vacancyId}/feedback:
@@ -1891,6 +1896,13 @@ paths:
       summary: Обратная связь из формы Вакансии
       description: Принимает данные из формы обратной связи
       operationId: postVacancyFeedback
+      parameters:
+        - name: vacancyId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
       tags:
         - Вакансии
       requestBody:
@@ -2025,19 +2037,18 @@ paths:
       operationId: deleteBookingById
       tags:
         - Действия с пользователем
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                bookingId:
-                  type: integer
-                  example: 1282300
+      
       responses:
         '200':
           description: Deletion succeeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookingId:
+                    type: integer
+                    example: 1282300
         '400':
           description: Unable to cancel booking
 
