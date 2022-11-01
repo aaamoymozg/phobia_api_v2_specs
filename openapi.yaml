@@ -1047,7 +1047,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/Showcase'
 
   
@@ -1142,6 +1141,13 @@ paths:
   /api/v2/blog/promo-posts/{postId}:
     get:
       summary: Promo post detail
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
       operationId: getPromoBlogPostById
       tags:
         - Блог
@@ -1682,7 +1688,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuestInfoWithPercent'
+                $ref: '#/components/schemas/QuestSearchResults'
         '401':
           description: Unauthorized request
   
@@ -1883,7 +1889,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/Vacancy'
 
   /api/v2/vacancies/{vacancyId}/feedback:
@@ -1891,6 +1896,13 @@ paths:
       summary: Обратная связь из формы Вакансии
       description: Принимает данные из формы обратной связи
       operationId: postVacancyFeedback
+      parameters:
+        - name: vacancyId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
       tags:
         - Вакансии
       requestBody:
@@ -2025,19 +2037,18 @@ paths:
       operationId: deleteBookingById
       tags:
         - Действия с пользователем
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                bookingId:
-                  type: integer
-                  example: 1282300
+      
       responses:
         '200':
           description: Deletion succeeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookingId:
+                    type: integer
+                    example: 1282300
         '400':
           description: Unable to cancel booking
 
@@ -3118,7 +3129,23 @@ components:
           type: integer
           description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
           example: 4
-
+    
+    QuestSearchResults:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 500
+        next:
+          type: string
+          example: "http://localhost:8000/api/v2/quests/search/?complexity=5&fear_level=1&gamers=4&limit=20&offset=20&quest_type=performance"
+        previous:
+          type: string
+          example: null
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestInfoWithPercent'
     
     QuestInfoWithPercent:
       type: object
