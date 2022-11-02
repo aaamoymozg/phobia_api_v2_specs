@@ -186,6 +186,8 @@ paths:
                 phone:
                   type: string
                   example: "+79689588604"
+              required:
+              - "phone"
       
       responses:
         '200':
