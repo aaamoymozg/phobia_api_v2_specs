@@ -913,6 +913,162 @@ paths:
                     type: boolean
                     example: True
 
+  /api/tickets/:
+    get:
+      summary: Получение информации о доступных типах билетов
+      description: Get info about available tickets
+      operationId: getTicketsInfo
+      tags:
+        - Бронирование через билеты
+      parameters:
+        - name: quest
+          in: query
+          description: Quest ID
+          required: true
+          schema:
+            type: integer
+            example: 620
+        
+      responses:
+        '200':
+          description: Tickets info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  quest:
+                    $ref: '#/components/schemas/QuestInfo'
+                  ticket_types:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 316
+                        name:
+                          type: string
+                          example: "Билет на 60 минут игры в выходные дни"
+                        description:
+                          type: string
+                          example: "1 билет = 1 участник"
+                        price:
+                          type: integer
+                          example: 950
+                        multiple:
+                          type: boolean
+                          example: true
+                        maximum:
+                          type: integer
+                          example: 3
+                        hidden:
+                          type: boolean
+                          example: false
+                        default_value:
+                          type: integer
+                          example: 0
+                        sales_unit:
+                          enum:
+                            - "чел"
+                            - "группа"
+                            - "час"
+                          example: null
+        
+        '404':
+          description: Квест не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Not found
+        
+        '400':
+          description: Нет ID квеста
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Invalid request params
+                    
+  /api/tickets/order/:
+    post:
+      summary: "Оформление билетов"
+      description: Order Tickets
+      operationId: OrderTickets
+      tags:
+        - Бронирование через билеты
+      
+      requestBody:
+        description: Order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "lalala@mail.ru"
+                name:
+                  type: string
+                  example: "Leonid Leonidov"
+                phone:
+                  type: string
+                  example: "7 (916) 123-45-67"
+                promocode:
+                  type: string
+                  example: "POLORON"
+                tickets:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      quantity:
+                        type: integer
+                        example: 1
+                      ticket_type:
+                        type: string
+                        example: "311"
+      
+      responses:
+        '200':
+          description: Successful payment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  confirmation:
+                    type: string
+                    example: redirect
+                  msg:
+                    type: string
+                    example: Redirect required
+                  redirect_url:
+                    type: string
+                    example: "https://yoomoney.ru/checkout/payments/v2/contract?orderId=2a5f353c-000f-5000-8000-13b63eff75f5"
+                  result:
+                    type: string
+                    example: success
+        
+        '400':
+          description: Bad Requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Некорректный номер телефона"
+  
   /api/v2/whoami:
     get:
       summary: Информация о пользователе
