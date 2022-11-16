@@ -1435,12 +1435,38 @@ paths:
       tags:
         - Квест
       parameters:
-      - in: path
-        name: questId
-        required: true
-        schema:
-          type: integer
-          minimum: 1
+        - in: path
+          name: questId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+
+      responses:
+        '200':
+          description: Get Frontend-optimized object for Quest
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestFrontendDetail'
+
+  /api/v2/quests/{questSlug}/:
+    get:
+      summary: get Quest frontend detail object by slug
+      operationId: getQuestFrontendDetailBySlug
+      tags:
+        - Квест
+      parameters:
+        - in: path
+          name: questSlug
+          required: true
+          schema:
+            type: string
+            example: ograblenie-banka
+            description: Quest slug
+
       responses:
         '200':
           description: Get Frontend-optimized object for Quest
