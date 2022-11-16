@@ -443,6 +443,7 @@ paths:
               - 'vr'
               - 'polygon_pvp'
               - 'polygon_pve'
+              - 'ograblenie-banka'
             example: 100
 
         - name: start_date
