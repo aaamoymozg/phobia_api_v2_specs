@@ -1147,7 +1147,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Location'
-  
+
+  /api/v2/cities/{cityId}/languages/:
+      get:
+        summary: Список языков города
+        description: Returns list of available languages
+        operationId: getCityLanguagesList
+        tags:
+          - География
+        parameters:
+        - in: path
+          name: cityId
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The City ID
+        responses:
+          '200':
+            description: City Languages list
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/AvailableLanguage'
+
   /api/v2/cities/{cityId}/locations/{locationId}/:
     get:
       summary: Локация
@@ -3467,13 +3492,12 @@ components:
       properties:
         code:
           type: string
-          description: Language code
+          description: Language code (ISO 639-1)
           example: 'ru'
-        
         name:
           type: string
           description: Language name
-          example: 'Russian'
+          example: 'Русский'
     
     BookedTimeslotResponse:
       type: object
