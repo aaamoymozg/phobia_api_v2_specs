@@ -311,9 +311,15 @@ paths:
                 user_id:
                   type: integer
                   example: 1
+                user_phone:
+                  type: string
+                  example: "+799912345567"
+                  description: Можно использовать вместо user_id в запросе
                 sms_code:
                   type: string
                   example: "123456"
+              required:
+                - sms_code
       
       responses:
         '200':
