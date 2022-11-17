@@ -1899,6 +1899,14 @@ paths:
             type: boolean
             example: true
 
+        - name: tags
+          in: query
+          description: Tags
+          schema:
+            type: string
+            description: Accepts tag slug
+            example: scary
+
         - name: categories
           in: query
           description: А что нравится особенно?
@@ -3314,6 +3322,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AvailableLanguage'
+
+        pictures:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestPicture'
+
+        videos:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestVideo'
+
+        showcases:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShowcaseMinimal'
         
         address:
           type: string
@@ -3380,10 +3403,12 @@ components:
           type: boolean
           description: Timeslot simple view mode
           example: False
+
         complexity_level:
           type: integer
           description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
           example: 4
+
         scare_level:
           type: integer
           description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
@@ -3531,6 +3556,51 @@ components:
           type: string
           description: Language name
           example: 'Русский'
+
+    QuestPicture:
+      type: object
+      description: Quest pictire
+      properties:
+        image_url:
+          type: string
+          description: Image url
+          example: https://media.claustrophobia.com/media/qb/100.jpg
+        image_title:
+          type: string
+          description: Image title
+          example: Image title
+      required:
+        - "image_url"
+
+    QuestVideo:
+      type: object
+      description: Quest video
+      properties:
+        service:
+          type: string
+          description: Service tag
+          example: 'youtube'
+        video_id:
+          type: string
+          description: Video ID
+          example: 'aabbcc'
+
+    ShowcaseMinimal:
+      type: object
+      description: Showcase Minimal objects
+      properties:
+        id:
+          type: integer
+          description: Showcase ID
+          example: 1
+        title:
+          type: string
+          description: Game date
+          example: 'Scary quests'
+        slug:
+          type: string
+          description: Game date
+          example: scary-quests
     
     BookedTimeslotResponse:
       type: object
