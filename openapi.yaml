@@ -107,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegistrationError'
 
-  /api/login:
+  /api/v2/login:
     post:
       summary: Авторизация
       description: User login
@@ -136,7 +136,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LoginError'
   
-  /api/recover:
+  /api/v2/recovery:
     post:
       summary: Восстановление пароля
       description: Recovery password
