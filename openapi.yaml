@@ -3292,9 +3292,9 @@ components:
           description: Quest email
           example: 'alcatraz@claustrophobia.com'
 
-        adilt_content:
+        adult_content:
           type: string
-          description: String - descriotion for ages restrictions
+          description: String - description for ages restrictions
           example: 'Allowed with parents'
 
         length_string:
@@ -3482,7 +3482,7 @@ components:
           description: Quest email
           example: 'alcatraz@claustrophobia.com'
 
-        adilt_content:
+        adult_content:
           type: string
           description: String - descriotion for ages restrictions
           example: 'Allowed with parents'
