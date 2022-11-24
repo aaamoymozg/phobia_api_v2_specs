@@ -2543,6 +2543,10 @@ components:
         url:
           type: string
           example: https://claustrophobia.com/ru/blog/post/pervyy-marketpleys-razvlecheniy-v-rossii/
+        date_published:
+            type: string
+            format: date
+            example: '07.12.2021'
     
     BlogPromoPost:
       type: object
@@ -2578,6 +2582,10 @@ components:
         order:
           type: integer
           example: 0
+        date_published:
+            type: string
+            format: date
+            example: '07.12.2021'
     
     User:
       type: object
