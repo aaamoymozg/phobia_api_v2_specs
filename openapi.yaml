@@ -3236,6 +3236,11 @@ components:
           type: integer
           description: Quest id
           example: 777
+
+        slug:
+          type: string
+          description: Showcase skug
+          example: scary-quests
         
         extra_info:
           type: string
@@ -3404,6 +3409,141 @@ components:
           description: Timeslot simple view mode
           example: False
 
+        complexity_level:
+          type: integer
+          description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
+          example: 4
+
+        scare_level:
+          type: integer
+          description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
+          example: 4
+
+    QuestInfoMinimal:
+      type: object
+      properties:
+        complexity_word:
+          type: string
+          description: Verbal difficulty level
+          example: 'средний'
+        
+        id:
+          type: integer
+          description: Quest id
+          example: 777
+
+        slug:
+          type: string
+          description: Quest slug
+          example: scary-quests
+        
+        extra_info:
+          type: string
+          description: Additional text
+          example: 'Два раунда по 30 минут'
+        
+        back_unblur_url:
+          type: string
+          format: url
+          description: Back unblur image  # Always returns an empty string here (hardcode)
+          example: ''
+        
+        back_blur_url:
+          type: string
+          format: url
+          description: Back blur image
+          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
+        
+        back_manual_url:
+          type: string
+          format: url
+          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
+        
+        quest_page_url:
+          type: string
+          format: url
+          description: Quest page relative url
+          example: '/ru/performance/777/'
+        
+        logo_url:
+          type: string
+          format: url
+          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
+        
+        logo_hover_url:
+          type: string
+          format: url
+          description: Logo hover link
+          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
+        
+        email:
+          type: string
+          format: email
+          description: Quest email
+          example: 'alcatraz@claustrophobia.com'
+
+        adilt_content:
+          type: string
+          description: String - descriotion for ages restrictions
+          example: 'Allowed with parents'
+
+        length_string:
+          type: string
+          description: Quest duration in words
+          example: '60 минут'
+        
+        phone:
+          type: string
+          format: phone
+          description: Quest phone number
+          example: '+7-965-406-69-21'
+        
+        available_languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/AvailableLanguage'
+        
+        address:
+          type: string
+          format: address
+          description: Quest address
+          example: 'Волгоградский проспект, д. 32, корп. 8'
+        
+        city_name:
+          type: string
+          description: Quest city in local language
+          example: 'Москва'
+        
+        tags_string:
+          type: string
+          description: Quest tags
+          example: 'Для большой компании, Простые, С актерами, Страшные'
+        
+        name:
+          type: string
+          description: Quest name
+          example: 'Прятки в Алькатрасе'
+        
+        quest_type:
+          type: string
+          description: Quest type
+          example: 'performance'
+        
+        length:
+          type: integer
+          description: Quest length
+          example: 60
+        
+        location_metro:
+          type: string
+          description: Metro next to the location
+          example: 'Волгоградский проспект'
+        
+        gamers_count_string:
+          type: string
+          description: Number of players allowed by text
+          example: '1-30 участников'
+        
         complexity_level:
           type: integer
           description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
@@ -3599,7 +3739,7 @@ components:
           example: 'Scary quests'
         slug:
           type: string
-          description: Game date
+          description: Showcase slug
           example: scary-quests
     
     BookedTimeslotResponse:
@@ -4114,11 +4254,20 @@ components:
         location_quests:
           type: array
           items:
-            $ref: '#/components/schemas/QuestInfo'
+            $ref: '#/components/schemas/QuestFrontendMinimal'
         recommended_quests:
           type: array
           items:
-            $ref: '#/components/schemas/QuestInfo'
+            $ref: '#/components/schemas/QuestFrontendMinimal'
+
+    QuestFrontendMinimal:
+      type: object
+      description: Frontend-optimized minimal product object
+      properties:
+        quest:
+          type: object
+          description: Quest object
+          $ref: '#/components/schemas/QuestInfoMinimal'
 
 security:
   - bearerAuth: [ ]
