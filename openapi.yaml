@@ -2657,10 +2657,10 @@ components:
           type: string
           example: 74.61982191733546
         count_room:
-          type: string
+          type: integer
           example: 4
         count_quest:
-          type: string
+          type: integer
           example: 4
         image:
           type: string
