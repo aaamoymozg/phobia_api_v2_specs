@@ -3227,218 +3227,160 @@ components:
         example: [ 'kassa','Банковская карта' ]
     
     QuestInfo:
-      type: object
-      properties:
-        complexity_word:
-          type: string
-          description: Verbal difficulty level
-          example: 'средний'
+      allOf:
+        - $ref: '#/components/schemas/QuestInfoMinimal'
+        - type: object
+          properties:
+            complexity_word:
+              type: string
+              description: Verbal difficulty level
+              example: 'средний'
+            
+            is_foreign:
+              type: boolean
+              description: The quest is abroad
+              example: false
+            
+            enable_priceline_min_price:
+              type: boolean
+              description: Show in the schedule the minimum price per person
+              example: false
+            
+            price_rule:
+              type: string
+              description: Ticket system
+              example: 'Прятки в Алькатрасе UPDATE 01.06.2021'
+            
+            allow_multibooking:
+              type: boolean
+              description: Allowed to book multiple games for one timeslot
+              example: false
+            
+            show_per_team_label_in_timetable:
+              type: boolean
+              description: Show \"Per team\" under the price in the price line
+              example: true
+            
+            analytics_currency_code:
+              type: string
+              description: Currency code to send to analytics
+              example: 'RUB'
+            
+            additional_services:
+              type: array
+              items:
+                $ref: '#/components/schemas/AdditionalService'
+            
+            pictures:
+              type: array
+              items:
+                $ref: '#/components/schemas/QuestPicture'
+            
+            videos:
+              type: array
+              items:
+                $ref: '#/components/schemas/QuestVideo'
+            
+            showcases:
+              type: array
+              items:
+                $ref: '#/components/schemas/ShowcaseMinimal'
+                
+            facts:
+              type: array
+              items:
+                type: string
+                
+            gamers:
+              type: array
+              items:
+                type: object
+                properties:
+                  min_gamers:
+                    type: integer
+                  max_gamers:
+                    type: integer
+            
+            prepay:
+              type: boolean
+              description: Prepayment for the quest is enabled
+              example: true
+            
+            show_from_in_timetable:
+              type: boolean
+              description: Show \"From\" above the price in the price line
+              example: false
+            
+            metro:
+              type: string
+              description: Metro next to the location
+              example: 'Волгоградский проспект'
+            
+            currency_code:
+              type: string
+              description: Quest currency code
+              example: 'RUB'
+            
+            timeslot_simple_view:
+              type: boolean
+              description: Timeslot simple view mode
+              example: False
         
-        is_foreign:
-          type: boolean
-          description: The quest is abroad
-          example: false
-        
-        enable_priceline_min_price:
-          type: boolean
-          description: Show in the schedule the minimum price per person
-          example: false
-        
-        price_rule:
-          type: string
-          description: Ticket system
-          example: 'Прятки в Алькатрасе UPDATE 01.06.2021'
-        
-        id:
-          type: integer
-          description: Quest id
-          example: 777
-
-        slug:
-          type: string
-          description: Showcase skug
-          example: scary-quests
-        
-        extra_info:
-          type: string
-          description: Additional text
-          example: 'Два раунда по 30 минут'
-        
-        allow_multibooking:
-          type: boolean
-          description: Allowed to book multiple games for one timeslot
-          example: false
-        
-        back_unblur_url:
-          type: string
-          format: url
-          description: Back unblur image  # Always returns an empty string here (hardcode)
-          example: ''
-        
-        back_blur_url:
-          type: string
-          format: url
-          description: Back blur image
-          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
-        
-        back_manual_url:
-          type: string
-          format: url
-          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
-        
-        quest_page_url:
-          type: string
-          format: url
-          description: Quest page relative url
-          example: '/ru/performance/777/'
-        
-        logo_url:
-          type: string
-          format: url
-          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
-        
-        logo_hover_url:
-          type: string
-          format: url
-          description: Logo hover link
-          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
-        
-        email:
-          type: string
-          format: email
-          description: Quest email
-          example: 'alcatraz@claustrophobia.com'
-
-        adult_content:
-          type: string
-          description: String - description for ages restrictions
-          example: 'Allowed with parents'
-
-        length_string:
-          type: string
-          description: Quest duration in words
-          example: '60 минут'
-        
-        show_per_team_label_in_timetable:
-          type: boolean
-          description: Show \"Per team\" under the price in the price line
-          example: true
-        
-        analytics_currency_code:
-          type: string
-          description: Currency code to send to analytics
-          example: 'RUB'
-        
-        phone:
-          type: string
-          format: phone
-          description: Quest phone number
-          example: '+7-965-406-69-21'
-
-        additional_services:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdditionalService'
-        
-        available_languages:
-          type: array
-          items:
-            $ref: '#/components/schemas/AvailableLanguage'
-
-        pictures:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestPicture'
-
-        videos:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestVideo'
-
-        showcases:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShowcaseMinimal'
-        
-        address:
-          type: string
-          format: address
-          description: Quest address
-          example: 'Волгоградский проспект, д. 32, корп. 8'
-        
-        city_name:
-          type: string
-          description: Quest city in local language
-          example: 'Москва'
-        
-        city_name_ru:
-          type: string
-          description: Quest city in Russian
-          example: 'Москва'
-        
-        prepay:
-          type: boolean
-          description: Prepayment for the quest is enabled
-          example: true
-        
-        tags_string:
-          type: string
-          description: Quest tags
-          example: 'Для большой компании, Простые, С актерами, Страшные'
-        
-        name:
-          type: string
-          description: Quest name
-          example: 'Прятки в Алькатрасе'
-        
-        show_from_in_timetable:
-          type: boolean
-          description: Show \"From\" above the price in the price line
-          example: false
-        
-        quest_type:
-          type: string
-          description: Quest type
-          example: 'performance'
-        
-        length:
-          type: integer
-          description: Quest length
-          example: 60
-        
-        location_metro:
-          type: string
-          description: Metro next to the location
-          example: 'Волгоградский проспект'
-        
-        gamers_count_string:
-          type: string
-          description: Number of players allowed by text
-          example: '1-30 участников'
-        
-        currency_code:
-          type: string
-          description: Quest currency code
-          example: 'RUB'
-        
-        timeslot_simple_view:
-          type: boolean
-          description: Timeslot simple view mode
-          example: False
-
-        complexity_level:
-          type: integer
-          description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
-          example: 4
-
-        scare_level:
-          type: integer
-          description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
-          example: 4
 
     QuestInfoMinimal:
       type: object
       properties:
+        age_restrictions:
+          type: object
+          properties:
+            symbol:
+              type: string
+              example: "18+"
+              description: Short symbol of age restrictions
+            verbose:
+              type: string
+              example: "With parents only"
+              description: Client-readable description of age restriction symbol
+              
+        rating:
+          type: number
+          example: 10
+          
+        has_random_sort_priority:
+          type: boolean
+          example: False
+          
+        is_top_quest:
+          type: boolean
+          example: False
+          
+        city_id:
+          type: integer
+          example: 1
+          
+        complexity_in_locks:
+          type: string
+          
+        country_name:
+          type: string
+          example: Russia
+          
+        fear_level_in_ghosts:
+          type: string
+          
+        gamers_count:
+          oneOf:
+            - type: integer
+            - type: string
+          example: 4
+            
+        hide_adult_content:
+          type: boolean
+          example: False
+          
+        ym_shop_id:
+          type: string
+        
         complexity_word:
           type: string
           description: Verbal difficulty level
@@ -3589,83 +3531,41 @@ components:
             $ref: '#/components/schemas/QuestInfoWithPercent'
     
     QuestInfoWithPercent:
-      type: object
-      properties:
-        similarity:
-          type: integer
-          example: 95
-        id:
-          type: integer
-          description: Quest id
-          example: 777
-        name:
-          type: string
-          description: Quest name
-          example: 'Прятки в Алькатрасе'
-        rating:
-          type: string
-          example: "9.5"
-        gamers_count_string:
-          type: string
-          description: Number of players allowed by text
-          example: '1-30 участников'
-        length_string:
-          type: string
-          description: Quest duration in words
-          example: '60 минут'
-        length:
-          type: integer
-          description: Quest length
-          example: 60
-        complexity:
-          type: integer
-          example: 3
-        fear_level:
-          type: integer
-          example: null
-        description_ru:
-          type: string
-          example: Когда-то в этом доме гостеприимно горел свет и звучал детский смех, пока однажды вся семья Кригель, жившая здесь, не исчезла. Леденящий душу ужас охватывает любого, кто осмеливается приблизиться к мрачному дому. Но разве вас это остановит?
-        quest_page_url:
-          type: string
-          format: url
-          description: Quest page relative url
-          example: '/ru/performance/777/'
-        back_blur:
-          type: string
-          format: url
-          description: Back blur image
-          example: 'https://media.claustrophobia.com/media/qb/777_back_blur_c0fc4e9aa3.jpg'
-        logo_hover:
-          type: string
-          format: url
-          description: Logo hover link
-          example: 'https://media.claustrophobia.com/media/l/777_logo_hover_3ba8ab003a.png'
-        location:
-          type: object
+      allOf:
+        - $ref: '#/components/schemas/QuestInfoMinimal'
+        - type: object
           properties:
-            metro:
+            similarity:
+              type: integer
+              example: 95
+            description:
               type: string
-              description: Metro next to the location
-              example: 'Волгоградский проспект'
-            
-            address:
-              type: string
-              format: address
-              description: Quest address
-              example: 'Волгоградский проспект, д. 32, корп. 8'
-            
-            phone:
-              type: string
-              format: phone
-              description: Quest phone number
-              example: '+7-965-406-69-21'
-            
-            email:
-              type: string
-              format: email
-              description: Quest email
-              example: 'alcatraz@claustrophobia.com'
+              example: Когда-то в этом доме гостеприимно горел свет и звучал детский смех, пока однажды вся семья Кригель, жившая здесь, не исчезла. Леденящий душу ужас охватывает любого, кто осмеливается приблизиться к мрачному дому. Но разве вас это остановит?
+            location:
+              type: object
+              properties:
+                metro:
+                  type: string
+                  description: Metro next to the location
+                  example: 'Волгоградский проспект'
+                
+                address:
+                  type: string
+                  format: address
+                  description: Quest address
+                  example: 'Волгоградский проспект, д. 32, корп. 8'
+                
+                phone:
+                  type: string
+                  format: phone
+                  description: Quest phone number
+                  example: '+7-965-406-69-21'
+                
+                email:
+                  type: string
+                  format: email
+                  description: Quest email
+                  example: 'alcatraz@claustrophobia.com'
     
     AdditionalService:
       type: object
