@@ -2775,6 +2775,10 @@ components:
           type: boolean
           description: Случайно ли сортируются квесты в витрине
           example: false
+        date_published:
+            type: string
+            format: date
+            example: '07.12.2021'
         items:
           type: array
           description: JSON Array of compilations (positions preserved)
