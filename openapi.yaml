@@ -3294,6 +3294,11 @@ components:
               type: array
               items:
                 type: string
+
+            labels:
+              type: array
+              items:
+                $ref: '#/components/schemas/QuestLabel'
                 
             gamers:
               type: array
@@ -3645,6 +3650,23 @@ components:
           type: string
           description: Video ID
           example: 'aabbcc'
+
+    QuestLabel:
+      type: object
+      description: Quest custom label. This image is limited by 300 px width
+      properties:
+        name:
+          type: string
+          description: Label name (title)
+          example: 'Ургант'
+        image_url:
+          type: string
+          description: Label image url
+          example: 'https://media.claustrophobia.com/static/master/base/body/quests/urgant-banner.png'
+        is_star:
+          type: boolean
+          description: Will be true if label is in star group
+          example: true
 
     ShowcaseMinimal:
       type: object
