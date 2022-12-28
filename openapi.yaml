@@ -3521,6 +3521,16 @@ components:
           type: integer
           description: Integer number describes product complexity in range between 0 and 5. Do not show 0 numbers in interface
           example: 4
+        
+        is_announced:
+          type: boolean
+          description: Flag that marks quest in Announcement mode (no opened schedule)
+          example: false
+          
+        is_unavailable:
+          type: boolean
+          description: Flag that marks quest in Unavailable mode (no more selling)
+          example: false
     
     QuestSearchResults:
       type: object
