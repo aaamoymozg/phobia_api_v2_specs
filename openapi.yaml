@@ -2423,8 +2423,6 @@ components:
           type: string
           example: https://media.claustrophobia.com/media/3.jpg
 
-        
-
     QuestPhoto:
       type: object
       properties:
@@ -2446,6 +2444,19 @@ components:
         photo_thumbnail_url:
           type: string
           example: game_images/thumbnails/3.jpg
+
+    QuestTagMinimal:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Страшные
+        slug:
+          type: string
+          example: scary
+        icon_url:
+          type: string
+          example: media.claustrophobia.com/ti/favicon-32x32.png
     
     QuestFeedback:
       type: object
@@ -2818,11 +2829,14 @@ components:
           type: boolean
           description: Имеет ли квест приоритет при случайной сортировке
           example: false
+        tags_string:
+          type: string
+          description: Quest tags
+          example: 'Для большой компании, Простые, С актерами, Страшные'
         tags:
           type: array
           items:
-            type: string
-          example: [ Для большой компании, Простые, С актерами, Страшные ]
+            $ref: '#/components/schemas/QuestTagMinimal'
         facts:
           type: array
           items:
@@ -3486,6 +3500,11 @@ components:
           type: string
           description: Quest tags
           example: 'Для большой компании, Простые, С актерами, Страшные'
+
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestTagMinimal'
         
         name:
           type: string
