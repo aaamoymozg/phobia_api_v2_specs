@@ -107,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegistrationError'
 
-  /api/v2/login:
+  /api/login:
     post:
       summary: Авторизация
       description: User login
