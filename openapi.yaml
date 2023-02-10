@@ -1449,6 +1449,23 @@ paths:
                 items:
                   $ref: '#/components/schemas/Station'
 
+  /api/v2/quests/:
+    get:
+      summary: get List of Quest frontend detail objects
+      operationId: getListQuestFrontendDetail
+      tags:
+        - Квест
+
+      responses:
+        '200':
+          description: List of Quest frontend detail objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestFrontendDetail'
+
   /api/v2/quests/{questId}/:
     get:
       summary: get Quest frontend detail object by Id
@@ -1469,9 +1486,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QuestFrontendDetail'
+                $ref: '#/components/schemas/QuestFrontendDetail'
 
   /api/v2/quests/{questSlug}/:
     get:
@@ -1494,9 +1509,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QuestFrontendDetail'
+                $ref: '#/components/schemas/QuestFrontendDetail'
     
   /api/v2/quests/{questId}/feedbacks/:
     get:
@@ -2125,7 +2138,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/AboutUsEvent'
 
   /api/v2/faq/{faqTag}:
