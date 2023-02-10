@@ -121,6 +121,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginData'
+
+  /api/login:
+    post:
+      summary: Авторизация
+      description: User login
+      operationId: Login
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginData'
       
       responses:
         '200':
