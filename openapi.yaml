@@ -2613,10 +2613,8 @@ components:
         button_link:
           type: string
           example: https://claustrophobia.com
-        headings:
-          type: array
-          items:
-            $ref: '#/components/schemas/BlogHeading'
+        heading:
+          $ref: '#/components/schemas/BlogHeading'
         order:
           type: integer
           example: 0
