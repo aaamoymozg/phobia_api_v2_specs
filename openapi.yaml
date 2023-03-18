@@ -762,7 +762,7 @@ paths:
         '403':
           description: Forbidden
   
-  /api/usecertificate/:
+  /api/v2/usecertificate/:
     get:
       summary: Информация о скидке и сроке действия сертификата
       description: Get certificate information
