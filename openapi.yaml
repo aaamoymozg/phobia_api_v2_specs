@@ -789,6 +789,12 @@ paths:
                   amount:
                     type: string
                     example: "1000 р."
+                  city:
+                    type: string
+                    example: "Москва"
+                  currency:
+                    type: string
+                    example: "$"
                   type:
                     type: string
                     example: "Standart"
@@ -797,6 +803,10 @@ paths:
                     format: date
                     example: "2019-05-17"
                   is_used:
+                    type: boolean
+                  "is_expired":
+                    type: boolean
+                  "is_exchangeable":
                     type: boolean
 
     post:
