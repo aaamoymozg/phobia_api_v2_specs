@@ -121,6 +121,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LoginData'
+
+  /api/login:
+    post:
+      summary: Авторизация
+      description: User login
+      operationId: Login
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginData'
       
       responses:
         '200':
@@ -754,7 +769,7 @@ paths:
         '403':
           description: Forbidden
   
-  /api/usecertificate/:
+  /api/v2/usecertificate/:
     get:
       summary: Информация о скидке и сроке действия сертификата
       description: Get certificate information
@@ -781,6 +796,12 @@ paths:
                   amount:
                     type: string
                     example: "1000 р."
+                  city:
+                    type: string
+                    example: "Москва"
+                  currency:
+                    type: string
+                    example: "$"
                   type:
                     type: string
                     example: "Standart"
@@ -789,6 +810,10 @@ paths:
                     format: date
                     example: "2019-05-17"
                   is_used:
+                    type: boolean
+                  "is_expired":
+                    type: boolean
+                  "is_exchangeable":
                     type: boolean
 
     post:
@@ -1437,6 +1462,23 @@ paths:
                 items:
                   $ref: '#/components/schemas/Station'
 
+  /api/v2/quests/:
+    get:
+      summary: get List of Quest frontend detail objects
+      operationId: getListQuestFrontendDetail
+      tags:
+        - Квест
+
+      responses:
+        '200':
+          description: List of Quest frontend detail objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuestFrontendDetail'
+
   /api/v2/quests/{questId}/:
     get:
       summary: get Quest frontend detail object by Id
@@ -1457,9 +1499,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QuestFrontendDetail'
+                $ref: '#/components/schemas/QuestFrontendDetail'
 
   /api/v2/quests/{questSlug}/:
     get:
@@ -1482,9 +1522,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QuestFrontendDetail'
+                $ref: '#/components/schemas/QuestFrontendDetail'
     
   /api/v2/quests/{questId}/feedbacks/:
     get:
@@ -2113,7 +2151,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 $ref: '#/components/schemas/AboutUsEvent'
 
   /api/v2/faq/{faqTag}:
@@ -2589,10 +2626,8 @@ components:
         button_link:
           type: string
           example: https://claustrophobia.com
-        headings:
-          type: array
-          items:
-            $ref: '#/components/schemas/BlogHeading'
+        heading:
+          $ref: '#/components/schemas/BlogHeading'
         order:
           type: integer
           example: 0
