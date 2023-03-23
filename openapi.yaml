@@ -182,7 +182,7 @@ paths:
               properties:
                 user_id:
                   type: integer
-                  example: 1
+                  example: 145333
                 phone:
                   type: string
                   example: "+79689588604"
@@ -191,15 +191,25 @@ paths:
       
       responses:
         '200':
-          description: Recovery sucessful
+          description: successful response
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success:
+                  error:
+                    type: boolean
+                  user_msg_display:
                     type: string
+              examples:
+                success:
+                  value:
+                    error: false
                     example: Вам отправлено новое сообщение
+                failure:
+                  value:
+                    error: true
+                    example: Слишком много попыток отправить смс
         
         '400':
           description: Bad Requests
@@ -210,18 +220,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Некорректный номер телефона
         
-        '429':
-          description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Слишком много попыток отправки sms
         
         '404':
           description: Not found
@@ -266,9 +265,19 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
+                  error:
+                    type: boolean
+                  user_msg_display:
                     type: string
-                    example: Вам отправлено новое сообщение
+              examples:
+                success:
+                  value:
+                    error: false
+                    user_msg_display: Вам отправлено новое сообщение
+                failure:
+                  value:
+                    error: true
+                    user_msg_display: Лимит отправки смс привышен обратитесь в поддержку
         
         '400':
           description: Bad Requests
@@ -279,18 +288,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Некорректный номер телефона
-        
-        '429':
-          description: Too Many Requests
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Слишком много попыток отправки sms
+  
         
   
   /api/v2/phone_confirmation/:
@@ -310,7 +308,7 @@ paths:
               properties:
                 user_id:
                   type: integer
-                  example: 1
+                  example: 14544
                 user_phone:
                   type: string
                   example: "+799912345567"
@@ -323,16 +321,26 @@ paths:
       
       responses:
         '200':
-          description: Recovery sucessful
+          description: sucessful response
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  status:
+                  error:
+                    type: boolean
+                  user_msg_display:
                     type: string
-                    example: success
-        
+              examples:
+                success:
+                  value:
+                    error: false
+                    user_msg_display: success
+                failure:
+                  value:
+                    error: true
+                    user_msg_display: Указан неверный код
+
         '400':
           description: Bad Requests
           content:
@@ -342,10 +350,9 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: Неправильный код
+                    example: Произошла ошибка
                   status:
                     type: string
-                    example: wrong_code
   
   /api/v1/timetable:
     get:
@@ -801,17 +808,17 @@ paths:
               properties:
                 game_id:
                   type: integer
-                  example: 4
+                  example: 454321
                 certificate_serial:
                   type: integer
-                  example: 123
+                  example: 123432
                 certificate_code:
                   type: string
                   example: "1111 1111 1111 1111"
       
       responses:
         '200':
-          description: Successful booking
+          description: Successful response
           content:
             application/json:
               schema:
@@ -819,13 +826,18 @@ paths:
                 properties:
                   error:
                     type: boolean
-                    example: False
-                  msg:
+                  user_msg_display:
                     type: string
-                    example: Сертификат успешно использован для оплаты игры
-                  redirect_to:
-                    type: string
-                    example: "/pay/success/3/"
+              examples:
+                success:
+                  value:
+                    error: false
+                    user_msg_display: Сертификат успешно использован для оплаты игры
+                failure:
+                  value:
+                    error: true
+                    user_msg_display: У данного сертификат истек срок годности
+                    
         
         '400':
           description: Error
@@ -834,18 +846,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  form_errors:
-                    type: object
-                    properties:
-                      certificate_serial:
-                        type: array
-                        items:
-                          type: string
-                          example: Сертификат с указанным номером отмечен как не проданный. Свяжитесь с нами по адресу helpme@claustrophobia.com
                   error:
-                    type: boolean
-                    example: true
-        
+                    type: string
+       
         
         '403':
           description: Forbidden
@@ -918,7 +921,7 @@ paths:
                   
                   show_error:
                     type: boolean
-                    example: True
+                    example: true
 
   /api/tickets/:
     get:
@@ -1299,7 +1302,7 @@ paths:
           description: The City ID
         - in: path
           name: questTagType
-          required: True
+          required: true
           schema:
             type: string
             enum: [ generic, genre, iwant ]
@@ -3347,7 +3350,7 @@ components:
             timeslot_simple_view:
               type: boolean
               description: Timeslot simple view mode
-              example: False
+              example: false
         
 
     QuestInfoMinimal:
@@ -3371,11 +3374,11 @@ components:
           
         has_random_sort_priority:
           type: boolean
-          example: False
+          example: false
           
         is_top_quest:
           type: boolean
-          example: False
+          example: false
           
         city_id:
           type: integer
@@ -3399,7 +3402,7 @@ components:
             
         hide_adult_content:
           type: boolean
-          example: False
+          example: false
           
         ym_shop_id:
           type: string
