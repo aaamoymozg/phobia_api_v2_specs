@@ -1032,7 +1032,7 @@ paths:
                     type: string
                     example: Invalid request params
                     
-  /api/tickets/order/:
+  /pay/api/tickets/order/:
     post:
       summary: "Оформление билетов"
       description: Order Tickets
