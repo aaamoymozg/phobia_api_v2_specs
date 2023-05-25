@@ -2637,6 +2637,23 @@ components:
             type: string
             format: date
             example: '07.12.2021'
+        quests:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogQuests'
+    
+    BlogQuests:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example : "Alien"
+        description:
+          type: string
+          example: "Very interesting, for super <b>smart boys</b> and girls"
     
     User:
       type: object
