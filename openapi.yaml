@@ -107,7 +107,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegistrationError'
 
-  /api/v2/login:
+  /api/login:
     post:
       summary: Авторизация
       description: User login
@@ -1032,7 +1032,7 @@ paths:
                     type: string
                     example: Invalid request params
                     
-  /api/tickets/order/:
+  /pay/api/tickets/order/:
     post:
       summary: "Оформление билетов"
       description: Order Tickets
@@ -1103,7 +1103,46 @@ paths:
                   error:
                     type: string
                     example: "Некорректный номер телефона"
-  
+
+  /promo/api/check-promo-code-arcade/?promo_code={promocodeCode}:
+    get:
+      summary: Get Promocode code discount for ticket type form
+      description: Returns User object
+      operationId: getTicketPromoCodeDiscount
+      tags:
+        - Бронирование через билеты
+      parameters:
+        - in: path
+          name: promocodeCode
+          required: true
+          schema:
+            type: string
+          description: Promo code code
+      responses:
+        '200':
+          description: Promo code check results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                  discount_percent:
+                    type: integer
+        '404':
+          description: Промокод не найден
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Not found
+                  show_error:
+                    type: boolean
+
   /api/v2/whoami:
     get:
       summary: Информация о пользователе
