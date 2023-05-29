@@ -4240,8 +4240,13 @@ components:
 
         payment:
           type: string
-          description: Payment type
+          description: Final Payment type
           example: 'online'
+
+        payment_choice:
+          type: string
+          description: Payment type selected by user
+          example: 'cash'
         
         extra_price:
           type: integer
