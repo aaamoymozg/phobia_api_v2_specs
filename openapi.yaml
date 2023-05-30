@@ -4177,6 +4177,11 @@ components:
           type: integer
           description: Game id
           example: 1182783
+
+        name:
+          type: string
+          description: Game verbose name
+          example: 3004725
         
         timeslot:
           type: integer
