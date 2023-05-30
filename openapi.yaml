@@ -4181,7 +4181,7 @@ components:
         name:
           type: string
           description: Game verbose name
-          example: 3004725
+          example: 'Железное сердце: 30.05.2023, 18:45'
         
         timeslot:
           type: integer
