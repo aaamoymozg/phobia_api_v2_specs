@@ -2378,23 +2378,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ExistingGame'
+
+
     delete:
       summary: Cancel existing booking
       operationId: deleteBookingById
       tags:
         - Действия с пользователем
-      
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bookingId:
+                  type: integer
+                  example: 124555
+                  description: GameID TO cancel
+              required:
+                - bookingId
+
       responses:
         '200':
           description: Deletion succeeded
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  bookingId:
-                    type: integer
-                    example: 1282300
+        '202':
+          description: Deletion unavailable
         '400':
           description: Unable to cancel booking
 
@@ -4187,6 +4196,11 @@ components:
           type: integer
           description: Game id
           example: 1182783
+
+        name:
+          type: string
+          description: Game verbose name
+          example: 'Железное сердце: 30.05.2023, 18:45'
         
         timeslot:
           type: integer
@@ -4250,8 +4264,13 @@ components:
 
         payment:
           type: string
-          description: Payment type
+          description: Final Payment type
           example: 'online'
+
+        payment_choice:
+          type: string
+          description: Payment type selected by user
+          example: 'cash'
         
         extra_price:
           type: integer
