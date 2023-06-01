@@ -1399,10 +1399,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/BlogShortPost'
   
-  /api/v2/blog/promo-posts?heading_id=1:
+  /api/v2/blog/promo-posts:
     get:
       summary: Карточки с кнопками и ссылками
       operationId: getPromoBlogPosts
+      description: If set page enable set page_size, and if use page_size enable page
       tags:
         - Главная
         - Блог
@@ -1414,35 +1415,17 @@ paths:
           schema:
             type: integer
             example: 1
-      responses:
-        '200':
-          description: A JSON array of Post objects
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BlogPromoPost'
-
-  /api/v2/blog/promo-posts?page=3&page_size=10:
-    get:
-      summary: Карточки с кнопками и ссылками
-      operationId: getPromoBlogPosts
-      tags:
-        - Главная
-        - Блог
-      parameters:
         - name: page
           in: query
           description: choice number page
-          required: true
+          required: false
           schema:
             type: integer
             example: 3
         - name: page_size
           in: query
           description: set size page 
-          required: true
+          required: false
           schema:
             type: integer
             example: 10
@@ -1456,7 +1439,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/BlogPromoPost'
-        
+
         '404':
           description: Not found
           content:
