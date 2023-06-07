@@ -1928,7 +1928,7 @@ paths:
             description: Unauthorized request
 
   
-  /api/v2/quests/search/:
+  /api/v2/wizard-search/:
     get:
       summary: Список наиболее подходящих квестов для Визарда
       description: Returns Filtered Quests
