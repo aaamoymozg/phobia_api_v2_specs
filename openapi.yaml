@@ -1992,14 +1992,6 @@ paths:
             type: boolean
             example: true
 
-        - name: tags
-          in: query
-          description: Tags
-          schema:
-            type: string
-            description: Accepts tag slug
-            example: scary
-
         - name: categories
           in: query
           description: А что нравится особенно?
