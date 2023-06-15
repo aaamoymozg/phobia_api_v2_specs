@@ -1142,17 +1142,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  msg:
-                    type: string
-                    example: Authentication credentials were not provided.
+
         
         '404':
           description: Пользователь не найден
@@ -2727,6 +2717,9 @@ components:
           type: boolean
           example: false
         is_superuser:
+          type: boolean
+          example: false
+        is_anonymous:
           type: boolean
           example: false
     
