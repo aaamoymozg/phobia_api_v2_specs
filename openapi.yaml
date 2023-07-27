@@ -2357,6 +2357,29 @@ paths:
           description: Have access to booking interface on product_id page
         '403':
           description: Have NO access to booking interface on product_id page
+  
+  /api/v2/certificate-products/:
+    get:
+      summary: get Info about certificates
+      tags:
+        - Сертификат
+      responses:
+        '200':
+          description: object vertificates box_cert and digital_cert
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  digital_cert:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DigitalCertificateInfo'
+                  box_cert:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BoxCertificateInfo'     
+
 
   /api/v2/user/bookings:
     get:
@@ -2697,6 +2720,44 @@ components:
         description:
           type: string
           example: "Very interesting, for super <b>smart boys</b> and girls"
+
+    DigitalCertificateInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 308
+        image_url:
+          type: string
+          example: "https://media.claustrophobia.com/media/store/products/%D0%9F%D1%80%D0%B5%D0%B2%D1%8C%D1%8E.png"
+        name:
+          type: string
+          example: "nominal certificate"
+        price:
+          type: integer
+          example: 1500.0
+        box:
+          type: boolean
+          example: false
+        descriotion:
+          type: string
+          example: "Вот он — ключ к захватывающим приключениям в реальном мире! Добавьте подарочный сертификат от Клаустрофобии в корзину и оформите заказ онлайн."
+        short_description:
+          type: string
+          example: "<p><b><font color=\"#ffd500\">Акция «1+1=3» ⚡️ </font></b><font color=\"#ffd500\">Закажите два сертификата и получите еще один электронный сертификат в подарок!</font></p>\r\n<p style=\"font-color=#ffd500; opacity: .5;\">"
+    
+    BoxCertificateInfo:
+      allOf:
+        - $ref: '#/components/schemas/DigitalCertificateInfo'
+        - type: object
+          properties:
+            location_stocks:
+              type: string
+              example:
+                Маросейка: 1
+                Красноармейская: 14
+
+
     
     User:
       type: object
