@@ -2372,7 +2372,7 @@ paths:
           example: courier
       responses:
         '200':
-          description: nearest 30 days without holidays
+          description: nearest 30 days, date isoformat 8601+timezone, without holidays and weekends
           content:
             application/json:
               schema:
@@ -2380,7 +2380,7 @@ paths:
                 properties:
                   available_delivery_dates: 
                     type: array
-                    example : ['01.08.2023', '02.08.2023', '03.08.2023', '04.08.2023', '07.08.2023', '08.08.2023', '09.08.2023', '10.08.2023', '11.08.2023', '14.08.2023', '15.08.2023', '16.08.2023', '17.08.2023', '18.08.2023', '...']
+                    example : ["2023-08-02T04:26:35+03:00","2023-08-03T04:26:35+03:00","2023-08-04T04:26:35+03:00","2023-08-07T04:26:35+03:00","2023-08-08T04:26:35+03:00","2023-08-09T04:26:35+03:00","2023-08-10T04:26:35+03:00","2023-08-11T04:26:35+03:00","2023-08-14T04:26:35+03:00","2023-08-15T04:26:35+03:00", '...']
 
   /api/v2/certificate-products/:
     get:
