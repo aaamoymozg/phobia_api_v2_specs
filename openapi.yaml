@@ -2706,6 +2706,10 @@ components:
         title:
           type: string
           example: Квест-хэйтер — профессия будущего
+        slug:
+          type: string
+          description: Blog Post record slug
+          example: "holidays"
         body:
           type: string
           example: Квест в реальности &mdash; это всегда увлекательное и запоминающееся событие
