@@ -1449,8 +1449,8 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            example: 1
+            type: string
+            example: best
       operationId: getPromoBlogPostById
       tags:
         - Блог
