@@ -2738,7 +2738,12 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BlogQuests'
-    
+        meta:
+          type: object
+          properties:
+            seo:
+              $ref: '#/components/schemas/SeoMeta'
+
     BlogQuests:
       type: object
       properties:
@@ -4451,6 +4456,18 @@ components:
           type: object
           description: Quest object
           $ref: '#/components/schemas/QuestInfoMinimal'
+
+    SeoMeta:
+      type: object
+      description: SEO meta tags set
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        keywords:
+          type: string
+
 
 security:
   - bearerAuth: [ ]
