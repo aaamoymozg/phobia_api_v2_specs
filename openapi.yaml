@@ -2406,8 +2406,113 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/BoxCertificateInfo'     
+  
+  /api/v2/certifiate-purchase/:
+    post:
+      summary: make order of certificates
+      tags:
+        - Сертификат
+      requestBody:
+        description: order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                delivery_type:
+                  type: string
+                  example: courier
+                address_dict:
+                  $ref: '#/components/schemas/DeliveryAddress'
+                delivery_date:
+                  type: string
+                  example: "2023-08-02T04:26:35+03:00"
+                product_list:
+                  type: array
+                  example: [{"id": 803, "price": 2500, "total": 2}, {"id": 802, "price": 4500, "total": 1}]
+                location_pickup:
+                  type: integer
+                  example: 304
+                user_name:
+                  type: string
+                  example: 'Molodja'
+                user_email:
+                  type: string
+                  example: 'molodja@yandex.ru'
+                user_phone:
+                  type: string
+                  example: '79269991122'
+                user_comment:
+                  type: string
+                  example: 'drop box near door'
+                payment_choice:
+                  type: string
+                  example: "cash"
+                payment_currency:
+                  type: integer
+                  example: 1
+                  default: 35
+              required:
+                - delivery_type
+                - product_list
+                - payment_choice
+                - location_pickup
+                - user_name
+                - user_email
+                - user_phone
 
-
+      
+      responses:
+        '200':
+          description: make order succes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: 'Redirect required'
+                  result:
+                    type: string
+                    example: "success"
+                  confirmation:
+                    type: string
+                    example: "redirect"
+                  redirect_url:
+                    type: string
+                    example: "https://claustrophobia.com/confirmation_order"
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: 'house required'
+        '404':
+          description: product or loaction not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: 'product not found'
+  
   /api/v2/user/bookings:
     get:
       summary: Get User Booking List
@@ -4468,6 +4573,28 @@ components:
         keywords:
           type: string
 
+    DeliveryAddress:
+      type: object
+      description: delivery address
+      properties:
+        city:
+          type: string
+        street:
+          type: string
+        house:
+          type: string
+        korp:
+          type: string
+        building:
+          type: string
+        apartment:
+          type: string
+        postcode:
+          type: string
+      required:
+        - "city"
+        - "street"
+        - "house"
 
 security:
   - bearerAuth: [ ]
