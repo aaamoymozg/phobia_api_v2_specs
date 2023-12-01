@@ -2512,6 +2512,43 @@ paths:
                   msg:
                     type: string
                     example: 'product not found'
+
+  /api/v2/products-stocks/:
+    get:
+      summary: check certificate with box stock
+      tags:
+        - Сертификат
+      parameters:
+        - name: products_ids
+          in: query
+          description: check certificate with box stock
+          required: true
+          schema:
+            required:
+              - products_ids
+            example: 304,308
+
+      responses:
+        '200':
+          description: stocks of locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductLocationsStock'
+    
+                        
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "products_ids не задан, или указан не верный тип данных"
   
   /api/v2/user/bookings:
     get:
@@ -2895,14 +2932,31 @@ components:
         - $ref: '#/components/schemas/DigitalCertificateInfo'
         - type: object
           properties:
-            location_stocks:
-              type: string
-              example:
-                Маросейка: 1
-                Красноармейская: 14
             box_price:
               type: integer
               example: 800
+
+    ProductLocationsStock:
+      type: object
+      properties:
+
+        product_id:
+          type: integer
+          example: 308
+        location_stocks:
+          type: array 
+          example: [
+                        {
+                            "location_id": 17,
+                            "name": "Яуза  (Яузская ул., д. 1/15, стр. 6 (вход с Яузского бульвара))",
+                            "stock": 3
+                        },
+                        {
+                            "location_id": 47,
+                            "name": "Маросейка  (Маросейка ул., д. 13, cтр. 3)",
+                            "stock": 1
+                        },
+                    ]
 
 
     
