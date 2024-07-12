@@ -4577,6 +4577,19 @@ components:
           description: posts list
           items:
             $ref: '#/components/schemas/BlogShortPost'
+        converted:
+          type: boolean
+          description: если true то будет mean_string и mean_tag
+          example: true
+        mean_tag:
+          type: string
+          description: converted tag
+          example: 'philosopher'
+        mean_string:
+          type: string
+          description: converted q
+          example: 'scary'
+
 
     QuestFrontendDetail:
       type: object
