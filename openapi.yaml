@@ -2358,6 +2358,45 @@ paths:
         '403':
           description: Have NO access to booking interface on product_id page
   
+  /api/v2/rating_quests_list:
+    get:
+      summary: get list rating or single rating.
+      operationId: RatingQuestList
+      tags:
+        - Разное
+      parameters:
+          - name: quest_id
+            in: query
+            description: if only set quest_id return last rating
+            schema:
+              type: integer
+              example: 443
+          - name: start_period
+            in: query
+            description: start_period for quest_id
+            schema:
+              type: string
+              example: 01.08.2024
+          - name: end_period
+            in: query
+            description: end_period for quest_id
+            schema:
+              type: string
+              example: 10.08.2024
+      responses:
+        '200':
+          description: we have two option response array or object
+          content:
+            application/json:
+              schema:
+                type: array
+                example : ['{"quest":16,"feedbacks_count":78,"custom_rating":"9.91","rating":"195.01","rating_norm":"8.92","return_rating":"0.14","rating_expert":"9.07","final_rating":null,"age":3502},
+                              {"quest":31,"feedbacks_count":61,"custom_rating":"9.76","rating":"170.96","rating_norm":"8.23","return_rating":"0.07","rating_expert":"8.23","final_rating":null,"age":2143}']
+
+
+        '403':
+          description: Have NO access to booking interface on product_id page
+  
   /api/v2/delivery-date-available/:
     get:
       summary: get available delivery dates  
