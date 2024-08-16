@@ -2552,6 +2552,74 @@ paths:
                     type: string
                     example: 'product not found'
 
+  /api/v2/new_feedback/:
+    post:
+      summary: send feedback
+      tags:
+        - Квест
+      requestBody:
+        description: feedback data for quest or game
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quest_id:
+                  type: integer
+                  example: 443
+                comment:
+                  type: string
+                  example: "Нам очень понравился квест, особенно лазить голышом в пасть дракона"
+                rating_general:
+                  description: "Общий рейтинг"
+                  type: integer
+                  example: 9
+                rating_ambiance:
+                  description: "Обстановка и атмосфера квеста"
+                  type: integer
+                  example: 8
+                reting_staff:
+                  description: "персонал"
+                  type: integer
+                  example: 10
+                rating_consistency:
+                  description: "Cвязность и логичность заданий (=> Сюжет и задания)"
+                  type: integer
+                  example: 10
+              required:
+                - quest_id
+                - text_feedback
+                - rating_general
+                - rating_ambiance
+                - rating_staff
+                - rating_consistency
+      responses:
+        '200':
+          description: make feedback success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "спасибо за отзыв на игру"
+        
+        '401':
+          description: Unauthorized request
+        
+        '404':
+          description: not found quest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "необходимо указать квест"
+
   /api/v2/products-stocks/:
     get:
       summary: check certificate with box stock
