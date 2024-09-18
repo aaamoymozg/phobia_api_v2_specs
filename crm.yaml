@@ -1,0 +1,189 @@
+openapi: 3.0.3
+
+info:
+  title: Claustrophobia.com CRM APIs specifications
+  description: Claustrophobia.com CRM APIs specifications
+  version: 2.0.0
+
+servers:
+  - url: 'https://claustrophobia.com/api/v2'
+  - url: 'https://sandbox.claustrophobia.com/api/v2'
+
+paths:
+  /login:
+    post:
+      summary: Авторизация
+      description: User login
+      operationId: Login
+      tags:
+        - Действия с пользователем
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginData'
+
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessfulLogin'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginError'
+
+  /whereami:
+    get:
+      summary: CRM User informaition
+      description: Returns CRM User object
+      operationId: getCRMUserInfo
+      tags:
+        - User
+      responses:
+        '200':
+          description: A JSON objects with CRM User representation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CRMUser'
+        '403':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: Not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    LoginData:
+      type: object
+      description: Login data
+      properties:
+        login:
+          type: string
+          description: User login (email or phone without + symbol)
+          example: 'user@claustrophobia.com'
+        password:
+          type: string
+          example: 'qwerty12345'
+
+    LoginError:
+      type: object
+      description: Login Error
+      properties:
+        status:
+          type: string
+          example: 'error'
+        errors:
+          type: object
+          properties:
+            password:
+              type: string
+              example: 'Wrong password'
+
+    SuccessfulLogin:
+      type: object
+      description: Successful login data
+      properties:
+        status:
+          type: string
+          example: 'ok'
+        page_url:
+          type: string
+          description: Redirect url
+          example: 'https://claustrophobia.com/ru/userprofile/529816/'
+        user_id:
+          type: integer
+          example: 529816
+        user_name:
+          type: string
+          example: 'markin'
+        user_phone_required:
+          type: boolean
+          description: 'Need to request a phone number?'
+          example: true
+        foreign:
+          type: boolean
+          description: Is the user a foreigner?
+          example: false
+
+    CRMQuest:
+      type: object
+      description: CRM Quest data
+      properties:
+        name:
+          type: string
+          description: CRM Quest name string
+        identifier:
+          type: string
+          description: CRM Quest identifier string
+
+    CRMLocation:
+      type: object
+      description: CRM Location data
+      properties:
+        name:
+          type: string
+          description: CRM Location name string
+        identifier:
+          type: string
+          description: CRM Location identifier string
+        quests:
+          type: array
+          description: CRM Location quests array
+          items:
+            $ref: '#/components/schemas/CRMQuest'
+
+    CRMSection:
+      type: string
+      description: CRM Section slug
+      example: 'games'
+
+    CRMUser:
+      type: object
+      description: CRM User data
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        is_staff:
+          type: boolean
+        is_superuser:
+          type: boolean
+        avatar_url:
+          type: string
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CRMLocation'
+        sections:
+          type: array
+          items:
+            $ref: '#/components/schemas/CRMSection'
+
+security:
+  - bearerAuth: [ ]
