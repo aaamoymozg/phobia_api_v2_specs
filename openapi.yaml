@@ -353,6 +353,97 @@ paths:
                     example: Произошла ошибка
                   status:
                     type: string
+
+  /api/v2/user/email/:
+    get:
+      summary: Retrieve the user's email
+      operationId: getUserEmail
+      tags:
+        - Действия с пользователем
+      responses:
+        '200':
+          description: Successfully retrieved the user's email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: user@example.com
+                    description: Verbose message (can be shown to the user). This response can contain HTML tags.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Unauthorized
+                    description: Verbose message (can be shown to the user). This response can contain HTML tags.
+
+    post:
+      summary: Update the user's email
+      operationId: updateUserEmail
+      tags:
+        - Действия с пользователем
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: newuser@example.com
+      responses:
+        '200':
+          description: Successfully updated the user's email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: На почту newuser@example.com отправлена ссылка для подтверждения изменения адреса электронной почты
+                    description: Verbose message (can be shown to the user). This response can contain HTML tags.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Email is required
+                    description: Verbose message (can be shown to the user). This response can contain HTML tags.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Unauthorized
+                    description: Verbose message (can be shown to the user). This response can contain HTML tags.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Данный email уже зарегистрирован на другого пользователя! <br><a href="/password_reset" class="link">Восстановить пароль?</a>
+                    description: Verbose message (can be shown to the user). This response can contain HTML tags.
   
   /api/v1/timetable:
     get:
