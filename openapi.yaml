@@ -3114,6 +3114,10 @@ components:
         is_anonymous:
           type: boolean
           example: false
+        is_email_update_required:
+          type: boolean
+          example: false
+          description: Flag that marks user's email update request requirement
     
     City:
       type: object
