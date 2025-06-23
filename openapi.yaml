@@ -844,7 +844,64 @@ paths:
         
         '403':
           description: Forbidden
-  
+
+  /api/cancelpromocode/:
+    post:
+      summary: "Отмена скидки по промокодн"
+      description: Cancel Promocode
+      operationId: CancelPromocode
+      tags:
+        - Расписание и бронирование
+
+      requestBody:
+        description: Order data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                game_id:
+                  type: integer
+                  example: 3004725
+
+      responses:
+        '200':
+          description: Operation succeeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Promocode cancelled
+                  user_msg_display:
+                    type: string
+                    example: Promocode cancelled
+                  error:
+                    type: boolean
+                    example: false
+
+        '403':
+          description: Operation failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Unable to cancel promocode
+                  user_msg_display:
+                    type: string
+                    example: Unable to cancel promocode
+                  error:
+                    type: boolean
+                    example: false
+        '404':
+          description: Operation failed - unable to find target game
+
   /api/v2/usecertificate/:
     get:
       summary: Информация о скидке и сроке действия сертификата
