@@ -879,9 +879,24 @@ paths:
                   user_msg_display:
                     type: string
                     example: Promocode cancelled
+                  result:
+                    type: string
+                    example: success
                   error:
                     type: boolean
                     example: false
+                  prepay_price:
+                    type: integer
+                    example: 900
+                  resulting_price:
+                    type: integer
+                    example: 3555
+                  free_game:
+                    type: boolean
+                    example: false
+                  discount_amount:
+                    type: integer
+                    example: 395
 
         '403':
           description: Operation failed
